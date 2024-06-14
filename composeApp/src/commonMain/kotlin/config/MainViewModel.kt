@@ -13,8 +13,10 @@ import repos.MainRepository
 class MainViewModel(private val mainRepository: MainRepository) : ScreenModel {
 
     private val _homeState = MutableStateFlow(HomeState())
+
     private val _homeViewState: MutableStateFlow<HomeScreenState> =
         MutableStateFlow(HomeScreenState.Loading)
+
     val homeViewState = _homeViewState.asStateFlow()
 
     suspend fun getProducts() = screenModelScope.launch {
@@ -62,14 +64,14 @@ class MainViewModel(private val mainRepository: MainRepository) : ScreenModel {
         val errorMessage: String? = null,
         val responseData: MainConfig? = null
     ) {
-        fun toUiState(): HomeScreenState {
-            return if (isLoading) {
-                HomeScreenState.Loading
-            } else if (errorMessage?.isNotEmpty() == true) {
-                HomeScreenState.Error(errorMessage)
-            } else {
-                HomeScreenState.Success(responseData!!)
-            }
+        fun toUiState(): HomeScreenState = when {
+            isLoading -> HomeScreenState.Loading
+            responseData != null -> HomeScreenState.Success(responseData)
+            else -> HomeScreenState.Error(errorMessage ?: BASIC_ERROR)
         }
+    }
+
+    companion object {
+        private const val BASIC_ERROR = "Error"
     }
 }
