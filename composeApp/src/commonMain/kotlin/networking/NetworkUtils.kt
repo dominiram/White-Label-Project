@@ -12,7 +12,6 @@ fun <T> toResultFlow(call: suspend () -> NetworkResult<T?>) : Flow<NetworkResult
                 println("response${response.data}")
                 emit(NetworkResult.Success(response.data))
             } catch (e: Exception) {
-//                  emit(NetWorkResult.Error("error", e.toString()))
                 emit(NetworkResult.Error(response.data, e.toString()))
             }
         }

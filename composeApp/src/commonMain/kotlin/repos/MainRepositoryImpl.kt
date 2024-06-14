@@ -1,6 +1,8 @@
 package repos
 
-import networking.ApiService
+import networking.ApiServiceImpl
 
-class MainRepositoryImpl(private val apiService: ApiService): MainRepository {
+class MainRepositoryImpl(private val apiServiceImpl: ApiServiceImpl) : MainRepository {
+
+    override suspend fun getAppConfig() = apiServiceImpl.getAppConfig()
 }
