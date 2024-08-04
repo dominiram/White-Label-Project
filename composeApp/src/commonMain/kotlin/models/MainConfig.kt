@@ -1,4 +1,4 @@
-package apiModels
+package models
 import kotlinx.serialization.SerialName
 
 data class MainConfig(

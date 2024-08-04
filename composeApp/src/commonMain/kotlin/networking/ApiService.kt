@@ -1,6 +1,6 @@
 package networking
 
-import apiModels.MainConfig
+import models.MainConfig
 import kotlinx.coroutines.flow.Flow
 
 interface ApiService {

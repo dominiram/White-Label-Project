@@ -1,6 +1,6 @@
 package config
 
-import apiModels.MainConfig
+import models.MainConfig
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import cafe.adriel.voyager.core.model.screenModelScope

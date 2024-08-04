@@ -1,6 +1,6 @@
 package repos
 
-import apiModels.MainConfig
+import models.MainConfig
 import kotlinx.coroutines.flow.Flow
 import networking.NetworkResult
 
