@@ -44,7 +44,7 @@ fun BottomNavigationBar(
     )
 
     AppBottomNavigationBar(
-        show = navController.shouldShowBottomBar(),
+        shouldShowBottomAppBar = navController.shouldShowBottomBar(),
         content = {
             screens.forEach { item ->
                 AppBottomNavigationBarItem(
@@ -61,7 +61,7 @@ fun BottomNavigationBar(
 @Composable
 fun AppBottomNavigationBar(
     modifier: Modifier = Modifier,
-    show: Boolean,
+    shouldShowBottomAppBar: Boolean,
     content: @Composable (RowScope.() -> Unit),
 ) {
     Surface(
@@ -69,7 +69,7 @@ fun AppBottomNavigationBar(
         contentColor = MaterialTheme.colorScheme.onBackground,
         modifier = modifier.windowInsetsPadding(BottomAppBarDefaults.windowInsets)
     ) {
-        if (show) {
+        if (shouldShowBottomAppBar) {
             Column {
                 HorizontalDivider(
                     modifier = Modifier
@@ -125,11 +125,7 @@ fun RowScope.AppBottomNavigationBarItem(
             text = label,
             style = TextStyle(
                 fontWeight = if (selected) FontWeight(700) else FontWeight(400),
-                color = if (selected) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.outline
-                }
+                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
             )
         )
     }
