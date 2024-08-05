@@ -60,14 +60,15 @@ kotlin {
             implementation(libs.kamel.image)
             implementation(libs.ktor.client.core)
 
-            implementation(libs.koin.core.v343)
             implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
             implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.androidx.datastore.core)
 
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
 
+            implementation(libs.lifecycle.viewmodel.compose)
         }
     }
 }

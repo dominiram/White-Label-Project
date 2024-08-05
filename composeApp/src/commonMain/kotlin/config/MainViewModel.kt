@@ -1,16 +1,16 @@
 package config
 
-import models.MainConfig
-import cafe.adriel.voyager.core.model.ScreenModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import models.MainConfig
 import networking.ApiStatus
 import repos.MainRepository
 
-class MainViewModel(private val mainRepository: MainRepository) : ScreenModel {
+class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     private val _homeState = MutableStateFlow(HomeState())
 
@@ -19,31 +19,25 @@ class MainViewModel(private val mainRepository: MainRepository) : ScreenModel {
 
     val homeViewState = _homeViewState.asStateFlow()
 
-    suspend fun getProducts() = screenModelScope.launch {
+    suspend fun getProducts() = viewModelScope.launch {
         try {
             mainRepository.getAppConfig().collect { response ->
                 when (response.status) {
-                    ApiStatus.LOADING -> {
-                        _homeState.update { it.copy(isLoading = true) }
+                    ApiStatus.LOADING -> _homeState.update { it.copy(isLoading = true) }
+
+                    ApiStatus.SUCCESS -> _homeState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "",
+                            responseData = response.data
+                        )
                     }
 
-                    ApiStatus.SUCCESS -> {
-                        _homeState.update {
-                            it.copy(
-                                isLoading = false,
-                                errorMessage = "",
-                                responseData = response.data
-                            )
-                        }
-                    }
-
-                    ApiStatus.ERROR -> {
-                        _homeState.update {
-                            it.copy(
-                                isLoading = false,
-                                errorMessage = response.message
-                            )
-                        }
+                    ApiStatus.ERROR -> _homeState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = response.message
+                        )
                     }
                 }
                 _homeViewState.value = _homeState.value.toUiState()
