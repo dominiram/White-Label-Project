@@ -2,6 +2,9 @@ package navigation
 
 import org.jetbrains.compose.resources.DrawableResource
 import whitelabelproject.composeapp.generated.resources.Res
+import whitelabelproject.composeapp.generated.resources.ic_home
+import whitelabelproject.composeapp.generated.resources.ic_news
+import whitelabelproject.composeapp.generated.resources.ic_search
 
 sealed class BottomBarScreen(
     val route: String,
@@ -14,15 +17,15 @@ sealed class BottomBarScreen(
         defaultIcon = Res.drawable.ic_home,
     )
 
-    data object Reels : BottomBarScreen(
-        route = "REELS",
-        title = "Reels",
-        defaultIcon = Res.drawable.ic_camera_reels_fill,
+    data object Search : BottomBarScreen(
+        route = "SEARCH",
+        title = "Search",
+        defaultIcon = Res.drawable.ic_search,
     )
 
-    data object Profile : BottomBarScreen(
-        route = "PROFILE",
-        title = "Profile",
-        defaultIcon = Res.drawable.ic_profile_circle,
+    data object News : BottomBarScreen(
+        route = "NEWS",
+        title = "News",
+        defaultIcon = Res.drawable.ic_news,
     )
 }
