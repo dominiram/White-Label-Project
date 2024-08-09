@@ -30,8 +30,7 @@ fun NavController.shouldShowBottomBar() =
     when (this.currentBackStackEntry?.destination?.route) {
         DestinationRoutes.MainNavigationRoutes.Home.route,
         DestinationRoutes.MainNavigationRoutes.News.route,
-        DestinationRoutes.MainNavigationRoutes.Search.route,
-        -> true
+        DestinationRoutes.MainNavigationRoutes.Search.route -> true
 
         else -> false
     }

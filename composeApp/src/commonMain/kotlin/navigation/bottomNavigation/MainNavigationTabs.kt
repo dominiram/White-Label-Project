@@ -1,5 +1,6 @@
 package navigation.bottomNavigation
 
+import navigation.bottomNavigation.Constants.WEB_VIEW_URL_NAV_ARG
 import org.jetbrains.compose.resources.DrawableResource
 import whitelabelproject.composeapp.generated.resources.Res
 import whitelabelproject.composeapp.generated.resources.ic_home
