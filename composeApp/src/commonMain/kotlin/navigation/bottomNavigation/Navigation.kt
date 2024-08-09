@@ -82,7 +82,7 @@ fun NavHostMain(
             }
         ) {
             composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {
-                HomeScreen(onNavigate = onNavigate)
+                HomeScreen(webViewUrl = "https://github.com/KevinnZou/compose-webview-multiplatform", onNavigate = onNavigate)
             }
 
             composable(route = DestinationRoutes.MainNavigationRoutes.News.route) {
