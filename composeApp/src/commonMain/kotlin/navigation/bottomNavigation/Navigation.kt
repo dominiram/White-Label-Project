@@ -8,16 +8,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import navigation.bottomNavigation.Constants.ENTER_DURATION
-import navigation.bottomNavigation.Constants.WEB_VIEW_URL_NAV_ARG
 import screens.home.HomeScreen
 import screens.news.NewsScreen
 import screens.search.SearchScreen
@@ -57,7 +53,7 @@ fun NavHostMain(
 
         NavHost(
             navController = navController,
-            startDestination = "${DestinationRoutes.MainNavigationRoutes.Home.route}/$WEB_VIEW_URL_NAV_ARG",
+            startDestination = DestinationRoutes.MainNavigationRoutes.Home.route,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
@@ -86,16 +82,13 @@ fun NavHostMain(
                 )
             }
         ) {
-            composable(
-                route = "${DestinationRoutes.MainNavigationRoutes.Home.route}/{$WEB_VIEW_URL_NAV_ARG}",
-                arguments = listOf(navArgument(WEB_VIEW_URL_NAV_ARG) { type = NavType.StringType })
-            ) { backStackEntry ->
+            composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {
 
-                val homeNavigationTest = "https://github.com/KevinnZou/compose-webview-multiplatform"
-                val webViewUrl = backStackEntry.arguments?.getString(WEB_VIEW_URL_NAV_ARG) ?: homeNavigationTest
+                val homeNavigationTest =
+                    "https://github.com/KevinnZou/compose-webview-multiplatform"
 
                 HomeScreen(
-                    webViewUrl = webViewUrl,
+                    webViewUrl = homeNavigationTest,
                     onNavigate = onNavigate
                 )
             }

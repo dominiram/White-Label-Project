@@ -1,8 +1,13 @@
 package repos
 
-import networking.ApiServiceImpl
+import networking.ApiService
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class MainRepositoryImpl(private val apiServiceImpl: ApiServiceImpl) : MainRepository {
+//TODO: look into ApiServiceImpl, since it causes the issue
+class MainRepositoryImpl : MainRepository, KoinComponent {
 
-    override suspend fun getAppConfig() = apiServiceImpl.getAppConfig()
+    private val apiService: ApiService by inject()
+
+    override suspend fun getAppConfig() = apiService.getAppConfig()
 }

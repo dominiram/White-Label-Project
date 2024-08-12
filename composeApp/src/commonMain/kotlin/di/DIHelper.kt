@@ -16,7 +16,7 @@ fun initKoin() = startKoin {
 
 val modules = module {
     single<ApiService> { ApiServiceImpl() }
-    single<MainRepository> { MainRepositoryImpl(get()) }
+    single<MainRepository> { MainRepositoryImpl() }
     viewModel { MainViewModel(get()) }
-    viewModel { HomeViewModel() }
+    viewModel { HomeViewModel(get()) }
 }
