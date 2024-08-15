@@ -10,20 +10,20 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 
-class ApiServiceImpl : ApiService {
+class ApiServiceImpl(private val httpClient: HttpClient) : ApiService {
 
-    private val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                useAlternativeNames = false
-            })
-        }
-
-        defaultRequest {
-            url(BASE_URL)
-        }
-    }
+//    private val httpClient = HttpClient {
+//        install(ContentNegotiation) {
+//            json(Json {
+//                ignoreUnknownKeys = true
+//                useAlternativeNames = false
+//            })
+//        }
+//
+//        defaultRequest {
+//            url(BASE_URL)
+//        }
+//    }
 
     override suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>> =
         toResultFlow { httpClient.get(BASE_URL + "config").body<NetworkResult<MainConfig>>() }
