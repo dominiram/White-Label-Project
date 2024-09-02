@@ -9,26 +9,10 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
+import whitelabelproject.buildKonfig.BuildKonfig
 
 class ApiServiceImpl(private val httpClient: HttpClient) : ApiService {
 
-//    private val httpClient = HttpClient {
-//        install(ContentNegotiation) {
-//            json(Json {
-//                ignoreUnknownKeys = true
-//                useAlternativeNames = false
-//            })
-//        }
-//
-//        defaultRequest {
-//            url(BASE_URL)
-//        }
-//    }
-
     override suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>> =
-        toResultFlow { httpClient.get(BASE_URL + "config").body<NetworkResult<MainConfig>>() }
-
-    companion object {
-        private const val BASE_URL = "https://ktor.io/docs/"
-    }
+        toResultFlow { httpClient.get(BuildKonfig.BASE_URL + "config").body<NetworkResult<MainConfig>>() }
 }

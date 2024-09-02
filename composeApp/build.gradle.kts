@@ -1,5 +1,16 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.buildkonfig.gradle.plugin)
+    }
+}
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -7,13 +18,17 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+    id("com.codingfeline.buildkonfig") version "0.15.1"
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_11)
+                }
+            }
         }
     }
     
@@ -27,7 +42,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -36,6 +51,7 @@ kotlin {
         }
 
         commonMain.dependencies {
+            //compose main
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -44,36 +60,43 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-            implementation(libs.navigator)
-            implementation(libs.navigator.screen.model)
-            implementation(libs.tab.navigator)
-            implementation(libs.navigator.transitions)
-            implementation(libs.navigator.koin)
-            implementation(libs.koin.core)
+            //main - viewModel, async image, constraint layout, coil, etc.
+            implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.kotlin.coroutines)
-
+            implementation(libs.compose.webview.multiplatform)
             implementation(libs.coil3.coil.compose)
-            implementation(libs.coil.network.ktor)
-            implementation(libs.kotlin.serialization)
-            implementation(libs.ktor.client.content.negotiation)
-
             implementation(libs.constraintlayout.compose.multiplatform)
             implementation(libs.kamel.image)
+
+            //navigation
+            implementation(libs.navigator)
+            implementation(libs.navigator.screen.model)
+            implementation(libs.navigator.transitions)
+            implementation(libs.navigator.koin)
+            implementation(libs.tab.navigator)
+
+            //ktor
+            implementation(libs.coil.network.ktor)
+            implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.auth)
+            implementation(libs.bundles.ktor)
+            implementation(libs.kotlin.serialization)
 
+            //koin
+            implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
+            //data storage
             implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.androidx.datastore.core)
 
+
+            //image picker
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
-
-            implementation(libs.lifecycle.viewmodel.compose)
-            implementation(libs.compose.webview.multiplatform)
-            implementation(libs.bundles.ktor)
         }
 
         nativeMain.dependencies {
@@ -119,3 +142,32 @@ android {
     }
 }
 
+buildkonfig {
+    packageName = "whitelabelproject.buildKonfig"
+    // objectName = "YourAwesomeConfig" - default is BuildKonfig
+
+    // default config is required
+    defaultConfigs {
+        buildConfigField(STRING, "BASE_URL", "value")
+    }
+
+    // flavor is passed as a first argument of defaultConfigs
+    defaultConfigs("dev") {
+        buildConfigField(STRING, "BASE_URL", "base_url_dev")
+    }
+
+    defaultConfigs("prod") {
+        buildConfigField(STRING, "BASE_URL", "base_url_PROD")
+    }
+
+    // flavor is passed as a first argument of targetConfigs
+    targetConfigs("dev") {
+        create("ios") {
+            buildConfigField(STRING, "BASE_URL", "devValueIos")
+        }
+
+        create("android") {
+            buildConfigField(STRING, "BASE_URL", "devValueAndroid")
+        }
+    }
+}
