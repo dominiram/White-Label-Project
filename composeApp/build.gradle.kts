@@ -160,7 +160,7 @@ buildkonfig {
         buildConfigField(STRING, "BASE_URL", "base_url_PROD")
     }
 
-    // flavor is passed as a first argument of targetConfigs
+    // flavor is passed as a first argument of targetConfigs - is this needed??
     targetConfigs("dev") {
         create("ios") {
             buildConfigField(STRING, "BASE_URL", "devValueIos")
