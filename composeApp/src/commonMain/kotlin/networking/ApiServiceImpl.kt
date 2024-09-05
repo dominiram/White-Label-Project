@@ -14,5 +14,7 @@ import whitelabelproject.buildKonfig.BuildKonfig
 class ApiServiceImpl(private val httpClient: HttpClient) : ApiService {
 
     override suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>> =
-        toResultFlow { httpClient.get(BuildKonfig.BASE_URL + "config").body<NetworkResult<MainConfig>>() }
+        toResultFlow {
+            httpClient.get(BuildKonfig.BASE_URL + "config").body<NetworkResult<MainConfig>>()
+        }
 }
