@@ -41,7 +41,7 @@ fun NavHostMain(
     Scaffold(
         topBar = {
             val title = getTitle(currentScreen)
-
+            //TODO: insert Navigation Drawer (hamburger menu)
             TopBar(
                 title = title,
                 canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
