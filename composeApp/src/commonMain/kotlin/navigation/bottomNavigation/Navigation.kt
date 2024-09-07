@@ -19,7 +19,7 @@ import screens.news.NewsScreen
 import screens.search.SearchScreen
 
 @Composable
-fun HomeNav() {
+fun MainBottomNavigation() {
     val navController = rememberNavController()
 
     NavHostMain(
