@@ -5,14 +5,18 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import navigation.bottomNavigation.Constants.ENTER_DURATION
 import screens.home.HomeScreen
 import screens.news.NewsScreen
@@ -41,11 +45,22 @@ fun NavHostMain(
     Scaffold(
         topBar = {
             val title = getTitle(currentScreen)
+            val drawerState = rememberDrawerState(DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
             //TODO: insert Navigation Drawer (hamburger menu)
-            TopBar(
-                title = title,
-                canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
-                navigateUp = { navController.navigateUp() }
+            NavigationDrawer(
+                isLeftSide = true,
+                drawerContent = {
+                    TopBar(
+                        title = title,
+                        canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
+                        hasGotRightSubNavigation = true,
+                        openSubCategories = { scope.launch { drawerState.open() } },
+                        navigateUp = { navController.navigateUp() }
+                    )
+                },
+                drawerState = drawerState,
+                navigationItems = emptyList()
             )
         },
         bottomBar = { BottomNavigationBar(navController) }
