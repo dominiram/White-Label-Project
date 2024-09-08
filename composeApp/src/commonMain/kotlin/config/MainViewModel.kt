@@ -40,6 +40,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
                         )
                     }
                 }
+
                 _homeViewState.value = _homeState.value.toUiState()
             }
         } catch (e: Exception) {

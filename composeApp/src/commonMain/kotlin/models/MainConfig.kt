@@ -19,7 +19,6 @@ data class MainConfig(
         private const val APP_CONFIG_TOP_MAIN_NAVIGATION = "top"
         private const val APP_CONFIG_BOTTOM_MAIN_NAVIGATION = "bottom"
     }
-
 }
 
 sealed class AppMainNavigationConfig(val config: String) {
