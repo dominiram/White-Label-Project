@@ -45,7 +45,7 @@ fun TopBar(
     title: String,
     canNavigateBack: Boolean,
     hasGotRightSubNavigation: Boolean,
-    openSubCategories: () -> Unit,
+    onDrawerClicked: () -> Unit,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -55,7 +55,7 @@ fun TopBar(
                 modifier = Modifier.align(Alignment.Center), text = title
             )
 
-            if (hasGotRightSubNavigation) IconButton(onClick = openSubCategories) {
+            if (hasGotRightSubNavigation) IconButton(onClick = onDrawerClicked) {
                 Icon(
                     modifier = Modifier,
                     imageVector = Icons.Default.Menu,
