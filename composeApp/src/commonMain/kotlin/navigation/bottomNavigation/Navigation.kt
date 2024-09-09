@@ -19,6 +19,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import models.MainNavigationItem
+import models.NavigationItem
 import navigation.bottomNavigation.Constants.ENTER_DURATION
 import screens.home.HomeScreen
 import screens.news.NewsScreen
@@ -27,13 +29,55 @@ import screens.search.SearchScreen
 @Composable
 fun MainBottomNavigation() {
     val navController = rememberNavController()
+    val homeItem = DestinationRoutes.MainNavigationRoutes.Home
+    val reelsItem = DestinationRoutes.MainNavigationRoutes.News
+    val profileItem = DestinationRoutes.MainNavigationRoutes.Search
+
+    val navigationItems = listOf(
+        MainNavigationItem(
+            route = homeItem.route,
+            url = "https://github.com/KevinnZou/compose-webview-multiplatform",
+            name = homeItem.title,
+            tabIcon = homeItem.tabIcon,
+            subCategories = listOf(
+                NavigationItem(
+                    route = homeItem.route,
+                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
+                    name = homeItem.title
+                ),
+
+                NavigationItem(
+                    route = homeItem.route,
+                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
+                    name = homeItem.title
+                ),
+            ),
+        ),
+
+        MainNavigationItem(
+            route = reelsItem.route,
+            url = "https://github.com/",
+            name = reelsItem.title,
+            tabIcon = reelsItem.tabIcon,
+            subCategories = arrayListOf(),
+        ),
+
+        MainNavigationItem(
+            route = profileItem.route,
+            url = "https://google.com/",
+            name = profileItem.title,
+            tabIcon = profileItem.tabIcon,
+            subCategories = arrayListOf()
+        )
+    )
 
     NavHostMain(
         navController = navController,
         onNavigate = { routeName ->
             navigateTo(routeName, navController)
         },
-        navigationItems = emptyList()
+        navigationItems = emptyList(),
+        mainNavigationItems = navigationItems
     )
 }
 
@@ -42,8 +86,9 @@ fun NavHostMain(
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-    navigationItems: List<@Composable () -> Unit>,
+    navigationItems: List<() -> Unit>,
     onNavigate: (rootName: String) -> Unit,
+    mainNavigationItems: List<MainNavigationItem> = arrayListOf()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
@@ -51,7 +96,6 @@ fun NavHostMain(
     Scaffold(
         topBar = {
             val title = getTitle(currentScreen)
-            //TODO: insert Navigation Drawer (hamburger menu)
 
             TopBar(
                 title = title,
@@ -61,7 +105,7 @@ fun NavHostMain(
                 navigateUp = { navController.navigateUp() }
             )
         },
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = { BottomNavigationBar(navController, mainNavigationItems) }
     ) { innerPadding ->
 
         NavigationDrawer(
@@ -98,24 +142,30 @@ fun NavHostMain(
                         )
                     }
                 ) {
-                    composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {
-
-                        val homeNavigationTest =
-                            "https://github.com/KevinnZou/compose-webview-multiplatform"
-
-                        HomeScreen(
-                            webViewUrl = homeNavigationTest,
-                            onNavigate = onNavigate
-                        )
+                    mainNavigationItems.forEach { navigationItem ->
+                        composable(route = navigationItem.route) {
+                            HomeScreen(navigationItem.url, onNavigate)
+                        }
                     }
 
-                    composable(route = DestinationRoutes.MainNavigationRoutes.News.route) {
-                        NewsScreen(onNavigate = onNavigate)
-                    }
-
-                    composable(route = DestinationRoutes.MainNavigationRoutes.Search.route) {
-                        SearchScreen(onNavigate = onNavigate)
-                    }
+//                    composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {
+//
+//                        val homeNavigationTest =
+//                            "https://github.com/KevinnZou/compose-webview-multiplatform"
+//
+//                        HomeScreen(
+//                            webViewUrl = homeNavigationTest,
+//                            onNavigate = onNavigate
+//                        )
+//                    }
+//
+//                    composable(route = DestinationRoutes.MainNavigationRoutes.News.route) {
+//                        NewsScreen(onNavigate = onNavigate)
+//                    }
+//
+//                    composable(route = DestinationRoutes.MainNavigationRoutes.Search.route) {
+//                        SearchScreen(onNavigate = onNavigate)
+//                    }
                 }
             },
             drawerState = drawerState,

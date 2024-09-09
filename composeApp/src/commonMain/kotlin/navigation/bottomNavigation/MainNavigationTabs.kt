@@ -41,4 +41,10 @@ sealed class DestinationRoutes(
         title = "NewsDetails",
         tabIcon = Res.drawable.ic_news,
     )
+
+    data class GenericTabItem(
+        override val route: String,
+        override var title: String,
+        override val tabIcon: DrawableResource
+    ): DestinationRoutes(route, title, tabIcon)
 }

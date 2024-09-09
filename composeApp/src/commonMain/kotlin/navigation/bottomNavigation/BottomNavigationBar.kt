@@ -27,31 +27,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import models.MainNavigationItem
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
+    mainNavigationItems: List<MainNavigationItem> = arrayListOf()
 ) {
-    val homeItem = DestinationRoutes.MainNavigationRoutes.Home
-    val reelsItem = DestinationRoutes.MainNavigationRoutes.News
-    val profileItem = DestinationRoutes.MainNavigationRoutes.Search
-
-    val screens = listOf(
-        homeItem,
-        reelsItem,
-        profileItem
-    )
 
     AppBottomNavigationBar(
-        modifier = Modifier.padding(top = 12.dp),
+        modifier = Modifier.padding(top = 24.dp),
         shouldShowBottomAppBar = navController.shouldShowBottomBar(),
         content = {
-            screens.forEach { item ->
+            mainNavigationItems.forEach { item ->
                 AppBottomNavigationBarItem(
                     icon = item.tabIcon,
-                    label = item.title,
+                    label = item.name,
                     onClick = { navigateBottomBar(navController, item.route) },
                     selected = navController.currentBackStackEntry?.destination?.route == item.route
                 )
