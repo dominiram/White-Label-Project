@@ -38,7 +38,6 @@ fun BottomNavigationBar(
 ) {
 
     AppBottomNavigationBar(
-        modifier = Modifier.padding(top = 24.dp),
         shouldShowBottomAppBar = navController.shouldShowBottomBar(),
         content = {
             mainNavigationItems.forEach { item ->
@@ -62,7 +61,9 @@ fun AppBottomNavigationBar(
     Surface(
         color = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
-        modifier = modifier.windowInsetsPadding(BottomAppBarDefaults.windowInsets)
+        modifier = modifier
+            .windowInsetsPadding(BottomAppBarDefaults.windowInsets)
+            .padding(top = 24.dp)
     ) {
         if (shouldShowBottomAppBar) {
             Column {

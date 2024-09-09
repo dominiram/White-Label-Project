@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -76,9 +78,13 @@ fun MainBottomNavigation() {
         onNavigate = { routeName ->
             navigateTo(routeName, navController)
         },
-        navigationItems = emptyList(),
         mainNavigationItems = navigationItems
     )
+}
+
+@Composable
+fun SubCategory(title: String) {
+    Text(title)
 }
 
 @Composable
@@ -86,12 +92,12 @@ fun NavHostMain(
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-    navigationItems: List<() -> Unit>,
     onNavigate: (rootName: String) -> Unit,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
+    var selectedTabItem: MainNavigationItem = rememberSaveable { mainNavigationItems[0] }
 
     Scaffold(
         topBar = {
@@ -144,6 +150,9 @@ fun NavHostMain(
                 ) {
                     mainNavigationItems.forEach { navigationItem ->
                         composable(route = navigationItem.route) {
+                            if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
+                                selectedTabItem = navigationItem
+
                             HomeScreen(navigationItem.url, onNavigate)
                         }
                     }
@@ -169,7 +178,7 @@ fun NavHostMain(
                 }
             },
             drawerState = drawerState,
-            navigationItems = navigationItems
+            navigationItems = selectedTabItem.subCategories
         )
     }
 }

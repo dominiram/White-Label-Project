@@ -22,17 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import models.NavigationItem
 
 @Composable
 fun NavigationDrawer(
     isLeftSide: Boolean,
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     drawerContent: @Composable () -> Unit,
-    navigationItems: List<() -> Unit>
+    navigationItems: List<NavigationItem>
 ) {
     ModalNavigationDrawer(modifier = Modifier,
         drawerState = drawerState,
-        drawerContent = { navigationItems.forEach { it() } }) {
+        drawerContent = { navigationItems.forEach { Text(it.name) } }) {
         CompositionLocalProvider(LocalLayoutDirection provides if (isLeftSide) LayoutDirection.Ltr else LayoutDirection.Rtl) {
             drawerContent()
         }
