@@ -20,8 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.sp
 import models.NavigationItem
 
 @Composable
@@ -33,7 +36,19 @@ fun NavigationDrawer(
 ) {
     ModalNavigationDrawer(modifier = Modifier,
         drawerState = drawerState,
-        drawerContent = { navigationItems.forEach { Text(it.name) } }) {
+        drawerContent = {
+            navigationItems.forEach {
+                Text(
+                    modifier = Modifier,
+                    text = it.name,
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        color = Color.White
+                    )
+                )
+            }
+        }
+    ) {
         CompositionLocalProvider(LocalLayoutDirection provides if (isLeftSide) LayoutDirection.Ltr else LayoutDirection.Rtl) {
             drawerContent()
         }

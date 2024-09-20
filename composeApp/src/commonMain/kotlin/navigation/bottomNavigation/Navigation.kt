@@ -2,6 +2,8 @@ package navigation.bottomNavigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -14,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -114,48 +117,50 @@ fun NavHostMain(
         bottomBar = { BottomNavigationBar(navController, mainNavigationItems) }
     ) { innerPadding ->
 
-        NavigationDrawer(
-            isLeftSide = true,
-            drawerContent = {
-                NavHost(
-                    navController = navController,
-                    startDestination = DestinationRoutes.MainNavigationRoutes.Home.route,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    enterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = tween(ENTER_DURATION)
-                        )
-                    },
-                    exitTransition = {
-                        slideOutOfContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = tween(ENTER_DURATION)
-                        )
-                    },
-                    popEnterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(ENTER_DURATION)
-                        )
-                    },
-                    popExitTransition = {
-                        slideOutOfContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(ENTER_DURATION)
-                        )
-                    }
-                ) {
-                    mainNavigationItems.forEach { navigationItem ->
-                        composable(route = navigationItem.route) {
-                            if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
-                                selectedTabItem = navigationItem
+        NavHost(
+            navController = navController,
+            startDestination = DestinationRoutes.MainNavigationRoutes.Home.route,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(ENTER_DURATION)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(ENTER_DURATION)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(ENTER_DURATION)
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(ENTER_DURATION)
+                )
+            }
+        ) {
+            mainNavigationItems.forEach { navigationItem ->
+                composable(route = navigationItem.route) {
+                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
+                        selectedTabItem = navigationItem
 
-                            HomeScreen(navigationItem.url, onNavigate)
-                        }
-                    }
+                    HomeScreen(
+                        webViewUrl = navigationItem.url,
+                        onNavigate = onNavigate,
+                        subCategories = navigationItem.subCategories,
+                        drawerState = drawerState
+                    )
+                }
+            }
 
 //                    composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {
 //
@@ -175,10 +180,6 @@ fun NavHostMain(
 //                    composable(route = DestinationRoutes.MainNavigationRoutes.Search.route) {
 //                        SearchScreen(onNavigate = onNavigate)
 //                    }
-                }
-            },
-            drawerState = drawerState,
-            navigationItems = selectedTabItem.subCategories
-        )
+        }
     }
 }
