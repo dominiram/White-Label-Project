@@ -2,21 +2,17 @@ package navigation.bottomNavigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,8 +24,6 @@ import models.MainNavigationItem
 import models.NavigationItem
 import navigation.bottomNavigation.Constants.ENTER_DURATION
 import screens.home.HomeScreen
-import screens.news.NewsScreen
-import screens.search.SearchScreen
 
 @Composable
 fun MainBottomNavigation() {
@@ -52,9 +46,9 @@ fun MainBottomNavigation() {
                 ),
 
                 NavigationItem(
-                    route = homeItem.route,
-                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-                    name = homeItem.title
+                    route = reelsItem.route,
+                    url = "https://github.com/",
+                    name = reelsItem.title
                 ),
             ),
         ),
@@ -86,11 +80,6 @@ fun MainBottomNavigation() {
 }
 
 @Composable
-fun SubCategory(title: String) {
-    Text(title)
-}
-
-@Composable
 fun NavHostMain(
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     scope: CoroutineScope = rememberCoroutineScope(),
@@ -109,7 +98,8 @@ fun NavHostMain(
             TopBar(
                 title = title,
                 canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
-                hasGotRightSubNavigation = true,
+                hasGotLeftSubNavigation = true,
+                hasGotRightSubNavigation = false,
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
                 navigateUp = { navController.navigateUp() }
             )
