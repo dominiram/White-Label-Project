@@ -97,6 +97,9 @@ kotlin {
             //image picker
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
+
+            //logger
+            implementation(libs.logging)
         }
 
         nativeMain.dependencies {

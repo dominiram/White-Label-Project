@@ -18,6 +18,7 @@ kotlin = "2.0.0"
 kotlinGradlePlugin = "1.9.0"
 ktor = "2.3.12"
 lifecycleViewmodelCompose = "2.8.0"
+logging = "1.5.0"
 voyager = "1.0.0"
 koin = "3.6.0-alpha3"
 koinCompose = "1.2.0-alpha3"
@@ -74,6 +75,7 @@ constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:cons
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+logging = { module = "org.lighthousegames:logging", version.ref = "logging" }
 navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 navigator-screen-model = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 navigator-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
