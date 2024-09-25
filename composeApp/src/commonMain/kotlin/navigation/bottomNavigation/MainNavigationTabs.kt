@@ -34,6 +34,12 @@ sealed class DestinationRoutes(
             title = "News",
             tabIcon = Res.drawable.ic_news,
         )
+
+        data object WebView: MainNavigationRoutes(
+            route = "WEB_VIEW",
+            title = "Web View",
+            tabIcon = Res.drawable.ic_home,
+        )
     }
 
     data object NewsDetails : DestinationRoutes(

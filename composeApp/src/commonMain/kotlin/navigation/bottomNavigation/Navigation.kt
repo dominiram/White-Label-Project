@@ -24,12 +24,14 @@ import models.MainNavigationItem
 import models.NavigationItem
 import navigation.bottomNavigation.Constants.ENTER_DURATION
 import screens.home.HomeScreen
+import screens.home.WebViewScreen
 
 @Composable
 fun MainBottomNavigation() {
     val navController = rememberNavController()
     val homeItem = DestinationRoutes.MainNavigationRoutes.Home
     val reelsItem = DestinationRoutes.MainNavigationRoutes.News
+    val webViewItem = DestinationRoutes.MainNavigationRoutes.WebView
     val profileItem = DestinationRoutes.MainNavigationRoutes.Search
 
     val navigationItems = listOf(
@@ -44,12 +46,16 @@ fun MainBottomNavigation() {
                     url = "https://github.com/KevinnZou/compose-webview-multiplatform",
                     name = homeItem.title
                 ),
-
                 NavigationItem(
                     route = reelsItem.route,
                     url = "https://github.com/",
                     name = reelsItem.title
                 ),
+                NavigationItem(
+                    route = webViewItem.route,
+                    url = "https://youtube.com/",
+                    name = webViewItem.title
+                )
             ),
         ),
 
@@ -139,17 +145,74 @@ fun NavHostMain(
             }
         ) {
             mainNavigationItems.forEach { navigationItem ->
-                composable(route = navigationItem.route) {
+                navigationItem.subCategories.takeIf { it.isNotEmpty() }?.forEach { item ->
+                    composable(route = item.route) {
+                        if (navController.currentBackStackEntry?.destination?.route == item.route)
+                            selectedTabItem = navigationItem
+
+                        when {
+                            item.isWebView() -> WebViewScreen(
+                                webViewUrl = navigationItem.url,
+                                onNavigate = { routeName ->
+                                    onNavigate(routeName)
+                                    scope.launch { drawerState.close() }
+                                },
+                                subCategories = navigationItem.subCategories,
+                                drawerState = drawerState
+                            )
+
+                            else -> HomeScreen(
+                                webViewUrl = navigationItem.url,
+                                onNavigate = { routeName ->
+                                    onNavigate(routeName)
+                                    scope.launch { drawerState.close() }
+                                },
+                                subCategories = navigationItem.subCategories,
+                                drawerState = drawerState
+                            )
+                        }
+                    }
+                } ?: composable(route = navigationItem.route) {
                     if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
                         selectedTabItem = navigationItem
 
                     HomeScreen(
                         webViewUrl = navigationItem.url,
-                        onNavigate = onNavigate,
+                        onNavigate = { routeName ->
+                            onNavigate(routeName)
+                            scope.launch { drawerState.close() }
+                        },
                         subCategories = navigationItem.subCategories,
                         drawerState = drawerState
                     )
                 }
+//                composable(route = navigationItem.route) {
+//                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
+//                        selectedTabItem = navigationItem
+//
+//                    //TODO: change this to open proper screen
+//                    when {
+//                        navigationItem.isWebView() -> WebViewScreen(
+//                            webViewUrl = navigationItem.url,
+//                            onNavigate = { routeName ->
+//                                onNavigate(routeName)
+//                                scope.launch { drawerState.close() }
+//                            },
+//                            subCategories = navigationItem.subCategories,
+//                            drawerState = drawerState
+//                        )
+//
+//                        else -> HomeScreen(
+//                            webViewUrl = navigationItem.url,
+//                            onNavigate = { routeName ->
+//                                onNavigate(routeName)
+//                                scope.launch { drawerState.close() }
+//                            },
+//                            subCategories = navigationItem.subCategories,
+//                            drawerState = drawerState
+//                        )
+//                    }
+//                }
             }
 
 //                    composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {

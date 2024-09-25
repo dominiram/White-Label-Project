@@ -1,10 +1,12 @@
 package navigation.bottomNavigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -34,6 +37,7 @@ fun NavigationDrawer(
     isLeftSide: Boolean,
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     drawerContent: @Composable () -> Unit,
+    onNavigationItemClicked: (String) -> Unit,
     navigationItems: List<NavigationItem>
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides if (isLeftSide) LayoutDirection.Ltr else LayoutDirection.Rtl) {
@@ -41,12 +45,17 @@ fun NavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
                 Column(
-                    modifier = Modifier,
+                    modifier = Modifier
+                        .fillMaxWidth(fraction = 0.9f)
+                        .fillMaxHeight()
+                        .background(color = Color.White),
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start
                 ) {
                     navigationItems.forEach {
-                        SubCategory(it.name)
+                        SubCategory(
+                            title = it.name,
+                            onClick = { onNavigationItemClicked(it.route) })
                     }
                 }
             }

@@ -61,9 +61,7 @@ fun AppBottomNavigationBar(
     Surface(
         color = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
-        modifier = modifier
-            .windowInsetsPadding(BottomAppBarDefaults.windowInsets)
-            .padding(top = 24.dp)
+        modifier = modifier.windowInsetsPadding(BottomAppBarDefaults.windowInsets)
     ) {
         if (shouldShowBottomAppBar) {
             Column {
@@ -76,6 +74,7 @@ fun AppBottomNavigationBar(
 
                 Row(
                     modifier = Modifier
+                        .padding(top = 12.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .selectableGroup(),

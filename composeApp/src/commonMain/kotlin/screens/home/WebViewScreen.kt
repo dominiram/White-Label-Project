@@ -9,12 +9,9 @@ import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
 import models.NavigationItem
 import navigation.bottomNavigation.NavigationDrawer
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
-fun HomeScreen(
+fun WebViewScreen(
     webViewUrl: String,
     onNavigate: (rootName: String) -> Unit,
     subCategories: List<NavigationItem>,
@@ -32,6 +29,4 @@ fun HomeScreen(
         drawerState = drawerState,
         navigationItems = subCategories
     )
-
-    val viewModel = koinViewModel<HomeViewModel>()
 }
