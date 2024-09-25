@@ -198,53 +198,7 @@ fun NavHostMain(
                         drawerState = drawerState
                     )
                 }
-//                composable(route = navigationItem.route) {
-//                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
-//                        selectedTabItem = navigationItem
-//
-//                    //TODO: change this to open proper screen
-//                    when {
-//                        navigationItem.isWebView() -> WebViewScreen(
-//                            webViewUrl = navigationItem.url,
-//                            onNavigate = { routeName ->
-//                                onNavigate(routeName)
-//                                scope.launch { drawerState.close() }
-//                            },
-//                            subCategories = navigationItem.subCategories,
-//                            drawerState = drawerState
-//                        )
-//
-//                        else -> HomeScreen(
-//                            webViewUrl = navigationItem.url,
-//                            onNavigate = { routeName ->
-//                                onNavigate(routeName)
-//                                scope.launch { drawerState.close() }
-//                            },
-//                            subCategories = navigationItem.subCategories,
-//                            drawerState = drawerState
-//                        )
-//                    }
-//                }
             }
-
-//                    composable(route = DestinationRoutes.MainNavigationRoutes.Home.route) {
-//
-//                        val homeNavigationTest =
-//                            "https://github.com/KevinnZou/compose-webview-multiplatform"
-//
-//                        HomeScreen(
-//                            webViewUrl = homeNavigationTest,
-//                            onNavigate = onNavigate
-//                        )
-//                    }
-//
-//                    composable(route = DestinationRoutes.MainNavigationRoutes.News.route) {
-//                        NewsScreen(onNavigate = onNavigate)
-//                    }
-//
-//                    composable(route = DestinationRoutes.MainNavigationRoutes.Search.route) {
-//                        SearchScreen(onNavigate = onNavigate)
-//                    }
         }
     }
 }
