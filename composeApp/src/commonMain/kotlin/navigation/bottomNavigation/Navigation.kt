@@ -34,6 +34,9 @@ fun MainBottomNavigation() {
     val webViewItem = DestinationRoutes.MainNavigationRoutes.WebView
     val profileItem = DestinationRoutes.MainNavigationRoutes.Search
 
+    val drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope: CoroutineScope = rememberCoroutineScope()
+
     val navigationItems = listOf(
         MainNavigationItem(
             route = homeItem.route,
@@ -77,9 +80,12 @@ fun MainBottomNavigation() {
     )
 
     NavHostMain(
+        drawerState = drawerState,
+        scope = scope,
         navController = navController,
         onNavigate = { routeName ->
             navigateTo(routeName, navController)
+            scope.launch { drawerState.close() }
         },
         mainNavigationItems = navigationItems
     )
@@ -87,8 +93,8 @@ fun MainBottomNavigation() {
 
 @Composable
 fun NavHostMain(
-    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
-    scope: CoroutineScope = rememberCoroutineScope(),
+    drawerState: DrawerState,
+    scope: CoroutineScope,
     navController: NavHostController = rememberNavController(),
     onNavigate: (rootName: String) -> Unit,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf()
@@ -110,7 +116,13 @@ fun NavHostMain(
                 navigateUp = { navController.navigateUp() }
             )
         },
-        bottomBar = { BottomNavigationBar(navController, mainNavigationItems) }
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                mainNavigationItems = mainNavigationItems,
+                closeNavigationDrawer = { scope.launch { drawerState.close() } }
+            )
+        }
     ) { innerPadding ->
 
         NavHost(
