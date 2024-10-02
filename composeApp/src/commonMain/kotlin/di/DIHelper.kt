@@ -17,6 +17,7 @@ import org.koin.dsl.module
 import repos.MainRepository
 import repos.MainRepositoryImpl
 import screens.home.HomeViewModel
+import whitelabelproject.buildKonfig.BuildKonfig
 
 fun initKoin() = startKoin {
     modules(modules)
@@ -36,7 +37,7 @@ val modules = module {
             }
 
             defaultRequest {
-                url(Constants.BASE_URL)
+                url(BuildKonfig.BASE_URL)
             }
         }
     }
@@ -45,8 +46,4 @@ val modules = module {
     single<MainRepository> { MainRepositoryImpl(get()) }
     viewModel { MainViewModel(get()) }
     viewModel { HomeViewModel(get()) }
-}
-
-object Constants {
-    const val BASE_URL = "https://ktor.io/docs/"
 }
