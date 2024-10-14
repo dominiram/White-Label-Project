@@ -1,4 +1,5 @@
 import SwiftUI
+import ComposeApp
 import FirebaseCore
 import FirebaseMessaging
 
@@ -14,7 +15,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       //You can still get notification content using #onPushNotification listener method.
       NotifierManager.shared.initialize(configuration: NotificationPlatformConfigurationIos(
             showPushNotification: true,
-            askNotificationPermissionOnStart: true)
+            askNotificationPermissionOnStart: true,
+            notificationSoundName: nil
+      )
       )
 
     return true
