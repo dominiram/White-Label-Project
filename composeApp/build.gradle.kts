@@ -1,5 +1,4 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 buildscript {
@@ -19,6 +18,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     id("com.codingfeline.buildkonfig") version "0.15.1"
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -31,7 +31,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -40,6 +40,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export("io.github.mirzemehdi:kmpnotifier:1.3.0")
         }
     }
 
@@ -48,6 +49,8 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
         }
 
         commonMain.dependencies {
@@ -97,6 +100,9 @@ kotlin {
             //image picker
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
+
+            //push notifications
+            api(libs.kmpnotifier)
 
             //logger
             implementation(libs.logging)
