@@ -13,6 +13,7 @@ buildscript {
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
@@ -42,6 +43,23 @@ kotlin {
             isStatic = true
             export("io.github.mirzemehdi:kmpnotifier:1.3.0")
         }
+    }
+
+    cocoapods {
+        summary = "Some description for the Shared Module"
+        homepage = "https://github.com/dominiram/White-Label-Project/"
+        version = "1.0"
+        ios.deploymentTarget = "16.0"
+        podfile = project.file("../iosApp/Podfile")
+
+        framework {
+            baseName = "ComposeApp"
+            isStatic = true
+            export(libs.kmpNotifier)
+        }
+
+        pod("FirebaseCore") { linkOnly = true }
+        pod("FirebaseMessaging")
     }
 
     sourceSets {
@@ -102,7 +120,7 @@ kotlin {
             implementation(libs.peekaboo.image.picker)
 
             //push notifications
-            api(libs.kmpnotifier)
+            api(libs.kmpNotifier)
 
             //logger
             implementation(libs.logging)
