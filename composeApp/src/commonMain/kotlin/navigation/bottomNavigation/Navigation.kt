@@ -10,6 +10,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -101,7 +102,7 @@ fun NavHostMain(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
-    var selectedTabItem: MainNavigationItem = rememberSaveable { mainNavigationItems[0] }
+    var selectedTabItem: MainNavigationItem = remember { mainNavigationItems[0] }
 
     Scaffold(
         topBar = {
