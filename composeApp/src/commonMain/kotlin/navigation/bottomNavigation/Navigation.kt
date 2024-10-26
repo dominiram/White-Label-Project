@@ -105,10 +105,8 @@ fun NavHostMain(
 
     Scaffold(
         topBar = {
-            val title = getTitle(currentScreen)
-
             TopBar(
-                title = title,
+                title = getTitle(currentScreen),
                 canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
                 hasGotLeftSubNavigation = true,
                 hasGotRightSubNavigation = false,
