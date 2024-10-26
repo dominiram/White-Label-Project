@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,17 +37,19 @@ import models.NavigationItem
 fun NavigationDrawer(
     isLeftSide: Boolean,
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-    drawerContent: @Composable () -> Unit,
+    screenContent: @Composable () -> Unit,
     onNavigationItemClicked: (String) -> Unit,
     navigationItems: List<NavigationItem>
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides if (isLeftSide) LayoutDirection.Ltr else LayoutDirection.Rtl) {
-        ModalNavigationDrawer(modifier = Modifier,
+        ModalNavigationDrawer(
+            modifier = Modifier,
+            gesturesEnabled = false,
             drawerState = drawerState,
             drawerContent = {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(fraction = 0.9f)
+                        .fillMaxWidth(fraction = 0.8f)
                         .fillMaxHeight()
                         .background(color = Color.White),
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
@@ -60,7 +63,9 @@ fun NavigationDrawer(
                 }
             }
         ) {
-            drawerContent()
+            Surface(modifier = Modifier.fillMaxSize()) {
+                screenContent()
+            }
         }
     }
 }

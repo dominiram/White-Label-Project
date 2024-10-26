@@ -37,7 +37,6 @@ fun BottomNavigationBar(
     mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
     closeNavigationDrawer: () -> Unit
 ) {
-
     AppBottomNavigationBar(
         shouldShowBottomAppBar = navController.shouldShowBottomBar(),
         content = {

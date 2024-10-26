@@ -18,12 +18,14 @@ fun WebViewScreen(
     drawerState: DrawerState
 ) {
     val webViewState = rememberWebViewState(webViewUrl)
-    WebView(state = webViewState)
 
     NavigationDrawer(
         isLeftSide = true,
-        drawerContent = {
-            Box(modifier = Modifier.fillMaxSize())
+        screenContent = {
+            WebView(
+                modifier = Modifier.fillMaxSize(),
+                state = webViewState
+            )
         },
         onNavigationItemClicked = onNavigate,
         drawerState = drawerState,
