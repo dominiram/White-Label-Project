@@ -19,7 +19,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     val homeViewState = _homeViewState.asStateFlow()
 
-    suspend fun getProducts() = viewModelScope.launch {
+    fun getProducts() = viewModelScope.launch {
         try {
             mainRepository.getAppConfig().collect { response ->
                 when (response.status) {
