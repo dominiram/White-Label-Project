@@ -26,6 +26,7 @@ fun String?.isNotMainNavigationRoute(): Boolean =
             this != DestinationRoutes.MainNavigationRoutes.News.route &&
             this != DestinationRoutes.MainNavigationRoutes.Search.route
 
+// TODO: check why this is null and in previous builds it wasn't
 fun NavController.shouldShowBottomBar() =
     when (this.currentBackStackEntry?.destination?.route) {
         DestinationRoutes.MainNavigationRoutes.Home.route,
