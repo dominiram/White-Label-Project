@@ -102,6 +102,7 @@ fun NavHostMain(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
     var selectedTabItem: MainNavigationItem = remember { mainNavigationItems[0] }
+    val shouldShowBottomAppBar = remember(backStackEntry) { navController.shouldShowBottomBar() }
 
     Scaffold(
         topBar = {
@@ -116,8 +117,10 @@ fun NavHostMain(
         },
         bottomBar = {
             BottomNavigationBar(
-                navController = navController,
                 mainNavigationItems = mainNavigationItems,
+                shouldShowBottomAppBar = shouldShowBottomAppBar,
+                navigateBottomBar = { route -> navigateBottomBar(navController, route) },
+                isItemSelected = { item -> isItemSelected(navController, item) },
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }

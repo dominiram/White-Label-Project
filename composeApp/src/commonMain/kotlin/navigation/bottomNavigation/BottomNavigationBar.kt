@@ -33,22 +33,24 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavHostController,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
+    shouldShowBottomAppBar: Boolean,
+    navigateBottomBar: (String) -> Unit,
+    isItemSelected: (MainNavigationItem) -> Boolean,
     closeNavigationDrawer: () -> Unit
 ) {
     AppBottomNavigationBar(
-        shouldShowBottomAppBar = navController.shouldShowBottomBar(),
+        shouldShowBottomAppBar = shouldShowBottomAppBar,
         content = {
             mainNavigationItems.forEach { item ->
                 AppBottomNavigationBarItem(
                     icon = item.tabIcon,
                     label = item.name,
                     onClick = {
-                        navigateBottomBar(navController, item.route)
+                        navigateBottomBar(item.route)
                         closeNavigationDrawer()
                     },
-                    selected = isItemSelected(navController, item)
+                    selected = isItemSelected(item)
                 )
             }
         }
@@ -128,7 +130,3 @@ fun RowScope.AppBottomNavigationBarItem(
         )
     }
 }
-
-fun isItemSelected(navController: NavHostController, item: MainNavigationItem): Boolean =
-    navController.currentBackStackEntry?.destination?.route == item.route ||
-            item.subCategories.find { navController.currentBackStackEntry?.destination?.route == it.route } != null
