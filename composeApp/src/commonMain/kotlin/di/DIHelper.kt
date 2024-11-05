@@ -1,5 +1,6 @@
 package di
 
+import AppViewModel
 import config.MainViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -14,8 +15,10 @@ import networking.ApiServiceImpl
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import repos.MainRepository
-import repos.MainRepositoryImpl
+import repos.config.ConfigRepository
+import repos.config.ConfigRepositoryImpl
+import repos.pushNotifications.PushNotificationsRepository
+import repos.pushNotifications.PushNotificationsRepositoryImpl
 import screens.home.HomeViewModel
 import whitelabelproject.buildKonfig.BuildKonfig
 
@@ -43,7 +46,9 @@ val modules = module {
     }
 
     single<ApiService> { ApiServiceImpl(get()) }
-    single<MainRepository> { MainRepositoryImpl(get()) }
+    single<PushNotificationsRepository> { PushNotificationsRepositoryImpl() }
+    single<ConfigRepository> { ConfigRepositoryImpl(get()) }
+    viewModel { AppViewModel(get()) }
     viewModel { MainViewModel(get()) }
     viewModel { HomeViewModel(get()) }
 }

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import models.MainConfig
 import networking.ApiStatus
-import repos.MainRepository
+import repos.config.ConfigRepository
 
-class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
+class MainViewModel(private val configRepository: ConfigRepository) : ViewModel() {
 
     private val _homeState = MutableStateFlow(HomeState())
 
@@ -21,7 +21,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     fun getProducts() = viewModelScope.launch {
         try {
-            mainRepository.getAppConfig().collect { response ->
+            configRepository.getAppConfig().collect { response ->
                 when (response.status) {
                     ApiStatus.LOADING -> _homeState.update { it.copy(isLoading = true) }
 

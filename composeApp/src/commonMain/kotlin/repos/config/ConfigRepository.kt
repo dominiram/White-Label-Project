@@ -1,9 +1,9 @@
-package repos
+package repos.config
 
 import models.MainConfig
 import kotlinx.coroutines.flow.Flow
 import networking.NetworkResult
 
-interface MainRepository {
+interface ConfigRepository {
     suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>>
 }
