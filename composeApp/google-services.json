@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "269451463078",
+    "project_id": "nsqauredapps-project",
+    "storage_bucket": "nsqauredapps-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269451463078:android:bbd4863a9ed0b8772ca767",
+        "android_client_info": {
+          "package_name": "org.nsquare.whitelabelproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxcYPD3HQRPfn3GBI6D4dKUD9W5KL3RDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

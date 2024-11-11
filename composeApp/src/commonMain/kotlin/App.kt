@@ -4,10 +4,8 @@ import di.initKoin
 import navigation.bottomNavigation.MainBottomNavigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import pushNotifications.initPushNotifications
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
 fun App() {
@@ -16,6 +14,7 @@ fun App() {
     initPushNotifications()
 
     val viewModel = koinViewModel<AppViewModel>()
+    viewModel.subscribeToNewsChannel()
 
     MaterialTheme {
         viewModel.initPushNotificationToken()
