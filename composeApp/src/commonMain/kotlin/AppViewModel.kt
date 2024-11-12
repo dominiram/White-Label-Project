@@ -13,6 +13,6 @@ class AppViewModel(
     }
 
     fun subscribeToNewsChannel() = viewModelScope.launch {
-//        NotifierManager.getPushNotifier().subscribeToTopic("news")
+        NotifierManager.getPushNotifier().subscribeToTopic("android-news")
     }
 }
