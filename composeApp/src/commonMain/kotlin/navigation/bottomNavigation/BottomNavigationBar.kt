@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -25,33 +26,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import models.MainNavigationItem
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavHostController,
+    mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
+    shouldShowBottomAppBar: Boolean,
+    navigateBottomBar: (String) -> Unit,
+    isItemSelected: (MainNavigationItem) -> Boolean,
+    closeNavigationDrawer: () -> Unit
 ) {
-    val homeItem = DestinationRoutes.MainNavigationRoutes.Home
-    val reelsItem = DestinationRoutes.MainNavigationRoutes.News
-    val profileItem = DestinationRoutes.MainNavigationRoutes.Search
-
-    val screens = listOf(
-        homeItem,
-        reelsItem,
-        profileItem
-    )
-
     AppBottomNavigationBar(
-        shouldShowBottomAppBar = navController.shouldShowBottomBar(),
+        shouldShowBottomAppBar = shouldShowBottomAppBar,
         content = {
-            screens.forEach { item ->
+            mainNavigationItems.forEach { item ->
                 AppBottomNavigationBarItem(
                     icon = item.tabIcon,
-                    label = item.title,
-                    onClick = { navigateBottomBar(navController, item.route) },
-                    selected = navController.currentBackStackEntry?.destination?.route == item.route
+                    label = item.name,
+                    onClick = {
+                        navigateBottomBar(item.route)
+                        closeNavigationDrawer()
+                    },
+                    selected = isItemSelected(item)
                 )
             }
         }
@@ -80,6 +78,7 @@ fun AppBottomNavigationBar(
 
                 Row(
                     modifier = Modifier
+                        .padding(top = 12.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .selectableGroup(),

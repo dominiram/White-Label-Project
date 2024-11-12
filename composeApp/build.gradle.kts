@@ -1,5 +1,4 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 buildscript {
@@ -14,11 +13,13 @@ buildscript {
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     id("com.codingfeline.buildkonfig") version "0.15.1"
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -31,7 +32,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -40,7 +41,25 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export("io.github.mirzemehdi:kmpnotifier:1.3.0")
         }
+    }
+
+    cocoapods {
+        summary = "Some description for the Shared Module"
+        homepage = "https://github.com/dominiram/White-Label-Project/"
+        version = "1.0"
+        ios.deploymentTarget = "16.0"
+        podfile = project.file("../iosApp/Podfile")
+
+        framework {
+            baseName = "ComposeApp"
+            isStatic = true
+            export(libs.kmpNotifier)
+        }
+
+        pod("FirebaseCore") { linkOnly = true }
+        pod("FirebaseMessaging")
     }
 
     sourceSets {
@@ -48,6 +67,8 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
         }
 
         commonMain.dependencies {
@@ -88,6 +109,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodelNavigation)
 
             //data storage
             implementation(libs.androidx.datastore.preferences.core)
@@ -97,6 +119,12 @@ kotlin {
             //image picker
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
+
+            //push notifications
+            api(libs.kmpNotifier)
+
+            //logger
+            implementation(libs.logging)
         }
 
         nativeMain.dependencies {
@@ -128,6 +156,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

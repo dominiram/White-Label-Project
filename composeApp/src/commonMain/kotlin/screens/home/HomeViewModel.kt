@@ -1,7 +1,7 @@
 package screens.home
 
 import androidx.lifecycle.ViewModel
-import repos.MainRepository
+import repos.config.ConfigRepository
 
-class HomeViewModel(private val mainRepository: MainRepository): ViewModel() {
+class HomeViewModel(private val configRepository: ConfigRepository): ViewModel() {
 }

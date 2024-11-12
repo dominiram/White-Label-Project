@@ -2,6 +2,8 @@ package navigation.bottomNavigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavHostController
+import models.MainNavigationItem
 import navigation.bottomNavigation.Constants.BACK_CLICK_ROUTE
 
 fun navigateTo(
@@ -30,7 +32,8 @@ fun NavController.shouldShowBottomBar() =
     when (this.currentBackStackEntry?.destination?.route) {
         DestinationRoutes.MainNavigationRoutes.Home.route,
         DestinationRoutes.MainNavigationRoutes.News.route,
-        DestinationRoutes.MainNavigationRoutes.Search.route -> true
+        DestinationRoutes.MainNavigationRoutes.Search.route,
+        DestinationRoutes.MainNavigationRoutes.WebView.route -> true
 
         else -> false
     }
@@ -45,3 +48,7 @@ fun navigateBottomBar(navController: NavController, destination: String) =
         launchSingleTop = true
         restoreState = true
     }
+
+fun isItemSelected(navController: NavHostController, item: MainNavigationItem): Boolean =
+    navController.currentBackStackEntry?.destination?.route == item.route ||
+            item.subCategories.find { navController.currentBackStackEntry?.destination?.route == it.route } != null
