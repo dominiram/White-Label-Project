@@ -1,6 +1,7 @@
 package navigation.bottomNavigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
@@ -58,7 +58,8 @@ fun NavigationDrawer(
                     navigationItems.forEach {
                         SubCategory(
                             title = it.name,
-                            onClick = { onNavigationItemClicked(it.route) })
+                            onClick = { onNavigationItemClicked(it.route) }
+                        )
                     }
                 }
             }
@@ -89,24 +90,20 @@ fun TopBar(
             ) {
 
                 if (hasGotLeftSubNavigation)
-                    IconButton(onClick = onDrawerClicked) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.clickable { onDrawerClicked() },
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null
+                    )
 
                 Text(modifier = Modifier.align(Alignment.Center), text = title)
 
                 if (hasGotRightSubNavigation)
-                    IconButton(onClick = onDrawerClicked) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.clickable { onDrawerClicked() },
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null
+                    )
             }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
