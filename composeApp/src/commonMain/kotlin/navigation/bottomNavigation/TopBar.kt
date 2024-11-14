@@ -1,6 +1,7 @@
 package navigation.bottomNavigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -89,24 +90,20 @@ fun TopBar(
             ) {
 
                 if (hasGotLeftSubNavigation)
-                    IconButton(onClick = onDrawerClicked) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.clickable { onDrawerClicked() },
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null
+                    )
 
                 Text(modifier = Modifier.align(Alignment.Center), text = title)
 
                 if (hasGotRightSubNavigation)
-                    IconButton(onClick = onDrawerClicked) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = null
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.clickable { onDrawerClicked() },
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null
+                    )
             }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(

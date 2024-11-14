@@ -112,12 +112,7 @@ fun RowScope.AppBottomNavigationBarItem(
             colorFilter = if (selected) ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(
                 MaterialTheme.colorScheme.outline
             ),
-            modifier = modifier.then(
-                Modifier.clickable {
-                    onClick()
-                }
-                    .size(24.dp)
-            )
+            modifier = Modifier.clickable { onClick() }.size(24.dp)
         )
 
         Text(
