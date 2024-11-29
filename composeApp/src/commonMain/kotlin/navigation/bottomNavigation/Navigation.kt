@@ -18,16 +18,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import config.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
 import models.NavigationItem
 import navigation.bottomNavigation.Constants.ENTER_DURATION
+import org.koin.compose.viewmodel.koinViewModel
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
 
 @Composable
 fun MainBottomNavigation() {
+    val viewModel = koinViewModel<MainViewModel>()
     val navController = rememberNavController()
     val homeItem = DestinationRoutes.MainNavigationRoutes.Home
     val reelsItem = DestinationRoutes.MainNavigationRoutes.News
@@ -36,6 +39,8 @@ fun MainBottomNavigation() {
 
     val drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed)
     val scope: CoroutineScope = rememberCoroutineScope()
+
+    viewModel.getConfig()
 
     val navigationItems = listOf(
         MainNavigationItem(

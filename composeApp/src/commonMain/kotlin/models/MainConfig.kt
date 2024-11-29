@@ -7,19 +7,18 @@ import whitelabelproject.composeapp.generated.resources.ic_news
 import whitelabelproject.composeapp.generated.resources.ic_search
 
 data class MainConfig(
-    @SerialName("app_main_config") val appMainConfiguration: String? = null,
-    @SerialName("bottom_navigation_items") val bottomNavigationItems: List<BottomNavigationItem>?
-) {
-    fun getAppMainConfig() = when (appMainConfiguration) {
-        APP_CONFIG_BOTTOM_MAIN_NAVIGATION -> AppMainNavigationConfig.BottomNavigationConfig
-        else -> AppMainNavigationConfig.TopNavigationConfig
-    }
+    @SerialName("languages") val languageList: List<LanguageResponse>
+)
 
-    companion object {
-        private const val APP_CONFIG_TOP_MAIN_NAVIGATION = "top"
-        private const val APP_CONFIG_BOTTOM_MAIN_NAVIGATION = "bottom"
-    }
-}
+data class LanguageResponse(
+    @SerialName("id") val id: Int? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("code") val code: String? = null,
+    @SerialName("default") val default: Int? = null,
+    @SerialName("top_menu") val topMenu: List<MainNavigationItem>? = null,
+    @SerialName("left_menu") val leftMenu: List<MainNavigationItem>? = null,
+    @SerialName("header_menu") val headerMenu: List<MainNavigationItem>? = null,
+)
 
 sealed class AppMainNavigationConfig(val config: String) {
     data object BottomNavigationConfig : AppMainNavigationConfig("bottom")

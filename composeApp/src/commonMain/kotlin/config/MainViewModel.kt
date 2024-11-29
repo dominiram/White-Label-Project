@@ -19,7 +19,7 @@ class MainViewModel(private val configRepository: ConfigRepository) : ViewModel(
 
     val homeViewState = _homeViewState.asStateFlow()
 
-    fun getProducts() = viewModelScope.launch {
+    fun getConfig() = viewModelScope.launch {
         try {
             configRepository.getAppConfig().collect { response ->
                 when (response.status) {

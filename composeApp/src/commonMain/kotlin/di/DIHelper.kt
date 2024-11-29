@@ -12,8 +12,8 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import networking.ApiService
 import networking.ApiServiceImpl
-import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import repos.config.ConfigRepository
 import repos.config.ConfigRepositoryImpl

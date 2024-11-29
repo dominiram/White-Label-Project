@@ -185,8 +185,8 @@ buildkonfig {
         buildConfigField(STRING, "BASE_URL", "base_url_dev")
     }
 
-    defaultConfigs("prod") {
-        buildConfigField(STRING, "BASE_URL", "base_url_PROD")
+    defaultConfigs("rtvPancevo") {
+        buildConfigField(STRING, "BASE_URL", "https://rtvpancevo.nsquaredapps.com")
     }
 
     // flavor is passed as a first argument of targetConfigs - is this needed??
