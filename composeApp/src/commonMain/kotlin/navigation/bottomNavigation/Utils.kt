@@ -51,4 +51,4 @@ fun navigateBottomBar(navController: NavController, destination: String) =
 
 fun isItemSelected(navController: NavHostController, item: MainNavigationItem): Boolean =
     navController.currentBackStackEntry?.destination?.route == item.route ||
-            item.subCategories.find { navController.currentBackStackEntry?.destination?.route == it.route } != null
+            item.subCategories?.find { navController.currentBackStackEntry?.destination?.route == it.route } != null
