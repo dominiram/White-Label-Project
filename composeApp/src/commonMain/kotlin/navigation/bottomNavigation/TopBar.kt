@@ -55,10 +55,10 @@ fun NavigationDrawer(
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    navigationItems.forEach {
-                        SubCategory(
-                            title = it.name,
-                            onClick = { onNavigationItemClicked(it.route) }
+                    navigationItems.forEach { category ->
+                        if (listOf(category.name, category.route).all { it != null }) SubCategory(
+                            title = category.name!!,
+                            onClick = { onNavigationItemClicked(category.route!!) }
                         )
                     }
                 }

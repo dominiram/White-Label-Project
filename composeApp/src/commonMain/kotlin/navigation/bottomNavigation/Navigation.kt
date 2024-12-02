@@ -9,6 +9,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,12 +43,14 @@ fun MainBottomNavigation() {
 
     viewModel.getConfig()
 
+    val configResponse = viewModel.homeViewState.collectAsState()
+
     val navigationItems = listOf(
         MainNavigationItem(
             route = homeItem.route,
             url = "https://github.com/KevinnZou/compose-webview-multiplatform",
             name = homeItem.title,
-            tabIcon = homeItem.tabIcon,
+            icon = homeItem.icon,
             subCategories = listOf(
                 NavigationItem(
                     route = homeItem.route,
@@ -71,7 +74,7 @@ fun MainBottomNavigation() {
             route = reelsItem.route,
             url = "https://github.com/",
             name = reelsItem.title,
-            tabIcon = reelsItem.tabIcon,
+            icon = reelsItem.icon,
             subCategories = arrayListOf(),
         ),
 
@@ -79,7 +82,7 @@ fun MainBottomNavigation() {
             route = profileItem.route,
             url = "https://google.com/",
             name = profileItem.title,
-            tabIcon = profileItem.tabIcon,
+            icon = profileItem.icon,
             subCategories = arrayListOf()
         )
     )
@@ -163,46 +166,58 @@ fun NavHostMain(
             }
         ) {
             mainNavigationItems.forEach { navigationItem ->
-                navigationItem.subCategories.takeIf { it.isNotEmpty() }?.forEach { item ->
-                    composable(route = item.route) {
-                        if (navController.currentBackStackEntry?.destination?.route == item.route)
+                navigationItem.subCategories.takeIf { it?.isNotEmpty() == true }?.forEach { item ->
+                    item.route?.let {
+                        composable(route = it) {
+                            if (navController.currentBackStackEntry?.destination?.route == item.route)
+                                selectedTabItem = navigationItem
+
+                            when {
+                                item.isWebView() -> navigationItem.url?.let { webViewUrl ->
+                                    WebViewScreen(
+                                        webViewUrl = webViewUrl,
+                                        onNavigate = { routeName ->
+                                            onNavigate(routeName)
+                                            scope.launch { drawerState.close() }
+                                        },
+                                        subCategories = navigationItem.subCategories
+                                            ?: arrayListOf(),
+                                        drawerState = drawerState
+                                    )
+                                }
+
+                                else -> navigationItem.url?.let { webViewUrl ->
+                                    HomeScreen(
+                                        webViewUrl = webViewUrl,
+                                        onNavigate = { routeName ->
+                                            onNavigate(routeName)
+                                            scope.launch { drawerState.close() }
+                                        },
+                                        subCategories = navigationItem.subCategories
+                                            ?: arrayListOf(),
+                                        drawerState = drawerState
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } ?: navigationItem.route?.let {
+                    composable(route = it) {
+                        if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
                             selectedTabItem = navigationItem
 
-                        when {
-                            item.isWebView() -> WebViewScreen(
-                                webViewUrl = navigationItem.url,
+                        navigationItem.url?.let { webViewUrl ->
+                            HomeScreen(
+                                webViewUrl = webViewUrl,
                                 onNavigate = { routeName ->
                                     onNavigate(routeName)
                                     scope.launch { drawerState.close() }
                                 },
-                                subCategories = navigationItem.subCategories,
-                                drawerState = drawerState
-                            )
-
-                            else -> HomeScreen(
-                                webViewUrl = navigationItem.url,
-                                onNavigate = { routeName ->
-                                    onNavigate(routeName)
-                                    scope.launch { drawerState.close() }
-                                },
-                                subCategories = navigationItem.subCategories,
+                                subCategories = navigationItem.subCategories ?: arrayListOf(),
                                 drawerState = drawerState
                             )
                         }
                     }
-                } ?: composable(route = navigationItem.route) {
-                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
-                        selectedTabItem = navigationItem
-
-                    HomeScreen(
-                        webViewUrl = navigationItem.url,
-                        onNavigate = { routeName ->
-                            onNavigate(routeName)
-                            scope.launch { drawerState.close() }
-                        },
-                        subCategories = navigationItem.subCategories,
-                        drawerState = drawerState
-                    )
                 }
             }
         }

@@ -42,15 +42,16 @@ fun BottomNavigationBar(
         shouldShowBottomAppBar = shouldShowBottomAppBar,
         content = {
             mainNavigationItems.forEach { item ->
-                AppBottomNavigationBarItem(
-                    icon = item.tabIcon,
-                    label = item.name,
-                    onClick = {
-                        navigateBottomBar(item.route)
-                        closeNavigationDrawer()
-                    },
-                    selected = isItemSelected(item)
-                )
+                if (listOf(item.route, item.name).all { it != null })
+                    AppBottomNavigationBarItem(
+                        icon = item.tabIcon,
+                        label = item.name!!,
+                        onClick = {
+                            navigateBottomBar(item.route!!)
+                            closeNavigationDrawer()
+                        },
+                        selected = isItemSelected(item)
+                    )
             }
         }
     )

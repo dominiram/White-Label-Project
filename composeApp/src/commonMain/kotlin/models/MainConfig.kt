@@ -17,7 +17,7 @@ data class LanguageResponse(
     @SerialName("default") val default: Int? = null,
     @SerialName("top_menu") val topMenu: List<MainNavigationItem>? = null,
     @SerialName("left_menu") val leftMenu: List<MainNavigationItem>? = null,
-    @SerialName("header_menu") val headerMenu: List<MainNavigationItem>? = null,
+    @SerialName("right_menu") val rightMenu: List<MainNavigationItem>? = null,
 )
 
 sealed class AppMainNavigationConfig(val config: String) {

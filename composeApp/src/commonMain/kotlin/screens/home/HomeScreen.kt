@@ -12,7 +12,6 @@ import navigation.bottomNavigation.NavigationDrawer
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreen(
     webViewUrl: String,
