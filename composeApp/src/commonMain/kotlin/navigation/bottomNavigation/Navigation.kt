@@ -40,10 +40,26 @@ fun MainBottomNavigation() {
 
     val drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed)
     val scope: CoroutineScope = rememberCoroutineScope()
-
+    val homeViewState by viewModel.homeViewState.collectAsState()
     viewModel.getConfig()
 
-    val configResponse = viewModel.homeViewState.collectAsState()
+    when (homeViewState) {
+        is MainViewModel.HomeScreenState.Loading -> {
+            //TODO: show loading indicator composable overlay
+        }
+
+        is MainViewModel.HomeScreenState.Error -> {
+            //TODO: show error message screen composable
+        }
+
+        is MainViewModel.HomeScreenState.Success -> {
+            //TODO: show success - what you have right now
+            val data =
+                (homeViewState as MainViewModel.HomeScreenState.Success).responseData.languageList
+
+            data[0].bottomMenu
+        }
+    }
 
     val navigationItems = listOf(
         MainNavigationItem(
