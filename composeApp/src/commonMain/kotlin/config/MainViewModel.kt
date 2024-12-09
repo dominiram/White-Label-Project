@@ -8,65 +8,52 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import models.MainConfig
 import networking.ApiStatus
+import org.lighthousegames.logging.logging
 import repos.config.ConfigRepository
 
 class MainViewModel(private val configRepository: ConfigRepository) : ViewModel() {
+    private val log = logging("MainViewModel")
 
     private val _homeState = MutableStateFlow(HomeState())
 
-    private val _homeViewState: MutableStateFlow<HomeScreenState> =
-        MutableStateFlow(HomeScreenState.Loading)
+    val homeViewState = _homeState.asStateFlow()
 
-    val homeViewState = _homeViewState.asStateFlow()
+    init {
+        getConfig()
+    }
 
-    fun getConfig() = viewModelScope.launch {
+    private fun getConfig() = viewModelScope.launch {
         try {
             configRepository.getAppConfig().collect { response ->
+                log.d { "MainViewModel response.data = ${response.data}" }
                 when (response.status) {
-                    ApiStatus.LOADING -> _homeState.update { it.copy(isLoading = true) }
-
-                    ApiStatus.SUCCESS -> _homeState.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = "",
-                            responseData = response.data
-                        )
-                    }
-
-                    ApiStatus.ERROR -> _homeState.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = response.message
-                        )
-                    }
+                    ApiStatus.LOADING -> onHomeStateLoading()
+                    ApiStatus.SUCCESS -> onHomeStateSuccess(response.data)
+                    ApiStatus.ERROR -> onHomeStateError(response.message)
                 }
-
-                _homeViewState.value = _homeState.value.toUiState()
             }
         } catch (e: Exception) {
-            _homeState.update { it.copy(isLoading = false, errorMessage = "Failed to fetch data") }
+            log.d { "MainViewModel exception: ${e.message}" }
+            e.printStackTrace()
+            onHomeStateError("Failed to fetch data")
         }
     }
 
-    sealed class HomeScreenState {
-        data object Loading : HomeScreenState()
-        data class Error(val errorMessage: String) : HomeScreenState()
-        data class Success(val responseData: MainConfig) : HomeScreenState()
+    private fun onHomeStateSuccess(data: MainConfig?) = _homeState.update {
+        it.copy(
+            isLoading = false,
+            errorMessage = "",
+            responseData = data
+        )
+    }.also { data?.let { config -> configRepository.saveApplicationConfig(config) } }
+
+    private fun onHomeStateError(errorMessage: String?) = _homeState.update {
+        it.copy(
+            isLoading = false,
+            errorMessage = errorMessage,
+            responseData = null
+        )
     }
 
-    private data class HomeState(
-        val isLoading: Boolean = false,
-        val errorMessage: String? = null,
-        val responseData: MainConfig? = null
-    ) {
-        fun toUiState(): HomeScreenState = when {
-            isLoading -> HomeScreenState.Loading
-            responseData != null -> HomeScreenState.Success(responseData)
-            else -> HomeScreenState.Error(errorMessage ?: BASIC_ERROR)
-        }
-    }
-
-    companion object {
-        private const val BASIC_ERROR = "Error"
-    }
+    private fun onHomeStateLoading() = _homeState.update { it.copy(isLoading = true) }
 }

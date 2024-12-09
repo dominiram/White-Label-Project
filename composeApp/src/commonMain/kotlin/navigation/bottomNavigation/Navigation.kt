@@ -9,7 +9,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import config.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
@@ -31,7 +29,7 @@ import screens.home.WebViewScreen
 
 @Composable
 fun MainBottomNavigation() {
-    val viewModel = koinViewModel<MainViewModel>()
+    val viewModel = koinViewModel<BottomNavigationViewModel>()
     val navController = rememberNavController()
     val homeItem = DestinationRoutes.MainNavigationRoutes.Home
     val reelsItem = DestinationRoutes.MainNavigationRoutes.News
@@ -40,68 +38,50 @@ fun MainBottomNavigation() {
 
     val drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed)
     val scope: CoroutineScope = rememberCoroutineScope()
-    val homeViewState by viewModel.homeViewState.collectAsState()
-    viewModel.getConfig()
 
-    when (homeViewState) {
-        is MainViewModel.HomeScreenState.Loading -> {
-            //TODO: show loading indicator composable overlay
-        }
+//    val navigationItems = listOf(
+//        MainNavigationItem(
+//            route = homeItem.route,
+//            url = "https://github.com/KevinnZou/compose-webview-multiplatform",
+//            name = homeItem.title,
+//            icon = homeItem.icon,
+//            subCategories = listOf(
+//                NavigationItem(
+//                    route = homeItem.route,
+//                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
+//                    name = homeItem.title
+//                ),
+//                NavigationItem(
+//                    route = reelsItem.route,
+//                    url = "https://github.com/",
+//                    name = reelsItem.title
+//                ),
+//                NavigationItem(
+//                    route = webViewItem.route,
+//                    url = "https://youtube.com/",
+//                    name = webViewItem.title
+//                )
+//            ),
+//        ),
+//
+//        MainNavigationItem(
+//            route = reelsItem.route,
+//            url = "https://github.com/",
+//            name = reelsItem.title,
+//            icon = reelsItem.icon,
+//            subCategories = arrayListOf(),
+//        ),
+//
+//        MainNavigationItem(
+//            route = profileItem.route,
+//            url = "https://google.com/",
+//            name = profileItem.title,
+//            icon = profileItem.icon,
+//            subCategories = arrayListOf()
+//        )
+//    )
 
-        is MainViewModel.HomeScreenState.Error -> {
-            //TODO: show error message screen composable
-        }
-
-        is MainViewModel.HomeScreenState.Success -> {
-            //TODO: show success - what you have right now
-            val data =
-                (homeViewState as MainViewModel.HomeScreenState.Success).responseData.languageList
-
-            data[0].bottomMenu
-        }
-    }
-
-    val navigationItems = listOf(
-        MainNavigationItem(
-            route = homeItem.route,
-            url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-            name = homeItem.title,
-            icon = homeItem.icon,
-            subCategories = listOf(
-                NavigationItem(
-                    route = homeItem.route,
-                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-                    name = homeItem.title
-                ),
-                NavigationItem(
-                    route = reelsItem.route,
-                    url = "https://github.com/",
-                    name = reelsItem.title
-                ),
-                NavigationItem(
-                    route = webViewItem.route,
-                    url = "https://youtube.com/",
-                    name = webViewItem.title
-                )
-            ),
-        ),
-
-        MainNavigationItem(
-            route = reelsItem.route,
-            url = "https://github.com/",
-            name = reelsItem.title,
-            icon = reelsItem.icon,
-            subCategories = arrayListOf(),
-        ),
-
-        MainNavigationItem(
-            route = profileItem.route,
-            url = "https://google.com/",
-            name = profileItem.title,
-            icon = profileItem.icon,
-            subCategories = arrayListOf()
-        )
-    )
+    val navigationItems = viewModel.getBottomNavigationItems()
 
     NavHostMain(
         drawerState = drawerState,

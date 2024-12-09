@@ -1,15 +1,18 @@
 package models
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import whitelabelproject.composeapp.generated.resources.Res
 import whitelabelproject.composeapp.generated.resources.ic_home
 import whitelabelproject.composeapp.generated.resources.ic_news
 import whitelabelproject.composeapp.generated.resources.ic_search
 
+@Serializable
 data class MainConfig(
     @SerialName("languages") val languageList: List<LanguageResponse>
 )
 
+@Serializable
 data class LanguageResponse(
     @SerialName("id") val id: Int? = null,
     @SerialName("name") val name: String? = null,
@@ -26,6 +29,7 @@ sealed class AppMainNavigationConfig(val config: String) {
     data object TopNavigationConfig : AppMainNavigationConfig("top")
 }
 
+@Serializable
 data class BottomNavigationItem(
     @SerialName("icon") val icon: String?,
     @SerialName("title") val title: String?,

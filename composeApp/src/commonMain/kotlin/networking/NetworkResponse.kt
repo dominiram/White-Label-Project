@@ -1,6 +1,14 @@
 package networking
 
-sealed class NetworkResult<out T>(val status: ApiStatus, val data: T?, val message: String?) {
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class NetworkResult<out T>(
+    val status: ApiStatus,
+    @SerialName("result") val data: T?,
+    val message: String?
+) {
 
     data class Success<out T>(val t: T?) :
         NetworkResult<T>(status = ApiStatus.SUCCESS, data = t, message = null)

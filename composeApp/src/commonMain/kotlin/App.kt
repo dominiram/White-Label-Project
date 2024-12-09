@@ -1,7 +1,7 @@
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import config.Main
 import di.initKoin
-import navigation.bottomNavigation.MainBottomNavigation
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import pushNotifications.initPushNotifications
@@ -18,6 +18,6 @@ fun App() {
 
     MaterialTheme {
         viewModel.initPushNotificationToken()
-        MainBottomNavigation()
+        Main()
     }
 }

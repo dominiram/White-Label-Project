@@ -10,6 +10,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import navigation.bottomNavigation.BottomNavigationViewModel
 import networking.ApiService
 import networking.ApiServiceImpl
 import org.koin.core.context.startKoin
@@ -50,5 +51,6 @@ val modules = module {
     single<ConfigRepository> { ConfigRepositoryImpl(get()) }
     viewModel { AppViewModel(get()) }
     viewModel { MainViewModel(get()) }
+    viewModel { BottomNavigationViewModel(get()) }
     viewModel { HomeViewModel(get()) }
 }
