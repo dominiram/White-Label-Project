@@ -10,10 +10,11 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -59,7 +60,13 @@ fun NavHostMain(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
-    var selectedTabItem: MainNavigationItem = remember { mainNavigationItems[0] }
+    var selectedTabItem: MainNavigationItem by remember { mutableStateOf(mainNavigationItems[0]) }
+
+    val selectedTabItemTitle by remember(selectedTabItem) {
+        mutableStateOf(
+            selectedTabItem.name ?: ""
+        )
+    }
 
     val shouldShowBottomAppBar =
         remember(backStackEntry) { mainNavigationItems.find { it == selectedTabItem } != null }
@@ -67,7 +74,7 @@ fun NavHostMain(
     Scaffold(
         topBar = {
             TopBar(
-                title = selectedTabItem.name ?: "",
+                title = selectedTabItemTitle,
                 canNavigateBack = !shouldShowBottomAppBar,
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
@@ -80,14 +87,15 @@ fun NavHostMain(
                 mainNavigationItems = mainNavigationItems,
                 shouldShowBottomAppBar = shouldShowBottomAppBar,
                 navigateBottomBar = { route ->
+                    mainNavigationItems.find { it.getFirstSubcategoryRoute() == route }?.let {
+                        selectedTabItem = it
+                    }
+
                     navigateBottomBar(
                         navController = navController,
                         beginning = mainNavigationItems[0].route,
                         destination = route
                     )
-                    mainNavigationItems.find { it.getDestinationRoute() == route }?.let {
-                        selectedTabItem = it
-                    }
                 },
                 isItemSelected = { item -> isItemSelected(navController, item) },
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
@@ -128,10 +136,7 @@ fun NavHostMain(
             mainNavigationItems.forEach { navigationItem ->
                 navigationItem.subCategories.takeIf { it?.isNotEmpty() == true }?.forEach { item ->
                     item.route?.let {
-                        composable(route = navigationItem.getDestinationRoute()) {
-                            if (navController.currentBackStackEntry?.destination?.route == item.route)
-                                selectedTabItem = navigationItem
-
+                        composable(route = item.getFullRoute()) {
                             when {
                                 item.isWebView() -> navigationItem.url?.let { webViewUrl ->
                                     WebViewScreen(
@@ -162,9 +167,6 @@ fun NavHostMain(
                         }
                     }
                 } ?: composable(route = navigationItem.route) {
-                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
-                        selectedTabItem = navigationItem
-
                     navigationItem.url?.let { webViewUrl ->
                         HomeScreen(
                             webViewUrl = webViewUrl,

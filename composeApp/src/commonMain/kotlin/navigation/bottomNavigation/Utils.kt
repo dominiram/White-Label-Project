@@ -29,4 +29,4 @@ fun navigateBottomBar(navController: NavController, beginning: String, destinati
     }
 
 fun isItemSelected(navController: NavHostController, item: MainNavigationItem): Boolean =
-    navController.currentBackStackEntry?.destination?.route == item.getDestinationRoute()
+    navController.currentBackStackEntry?.destination?.route?.substringBeforeLast('/') == item.route

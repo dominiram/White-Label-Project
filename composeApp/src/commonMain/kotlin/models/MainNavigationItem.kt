@@ -34,17 +34,19 @@ data class MainNavigationItem(
         else -> Res.drawable.compose_multiplatform
     }
 
-    fun getDestinationRoute(): String =
-        subCategories.takeIf { !it.isNullOrEmpty() }?.get(0)?.let { "$route/$it" } ?: route
+    fun getFirstSubcategoryRoute(): String =
+        subCategories.takeIf { !it.isNullOrEmpty() }?.get(0)?.let { "$route/${it.route}" } ?: route
 }
 
 @Serializable
 data class NavigationItem(
     @SerialName("id") val id: Long? = null,
     @SerialName("slug") val route: String? = null,
+    @SerialName("parent_slug") val parentRoute: String? = null,
     @SerialName("url") val url: String? = null,
     @SerialName("title") val name: String? = null,
     @SerialName("icon") val icon: String? = null,
 ) {
     fun isWebView() = route == WEB_VIEW_ROUTE
+    fun getFullRoute() = "$parentRoute/".takeIf { !parentRoute.isNullOrBlank() } + route
 }

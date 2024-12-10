@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -56,10 +57,15 @@ fun NavigationDrawer(
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    navigationItems.forEach { category ->
-                        if (listOf(category.name, category.route).all { it != null }) SubCategory(
-                            title = category.name!!,
-                            onClick = { onNavigationItemClicked(category.route!!) }
+                    navigationItems.forEach { subCategory ->
+                        if (listOf(
+                                subCategory.name,
+                                subCategory.parentRoute,
+                                subCategory.route
+                            ).all { it != null }
+                        ) SubCategory(
+                            title = subCategory.name!!,
+                            onClick = { onNavigationItemClicked(subCategory.getFullRoute()) }
                         )
                     }
                 }
@@ -101,7 +107,7 @@ fun TopBar(
 
                 if (hasGotRightSubNavigation)
                     Icon(
-                        modifier = Modifier.clickable { onDrawerClicked() },
+                        modifier = Modifier.padding(end = 8.dp).clickable { onDrawerClicked() },
                         imageVector = Icons.Default.Menu,
                         contentDescription = null
                     )

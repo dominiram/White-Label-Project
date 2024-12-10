@@ -46,8 +46,8 @@ fun BottomNavigationBar(
                     AppBottomNavigationBarItem(
                         icon = item.tabIcon,
                         label = item.name!!,
-                        onClick = {
-                            navigateBottomBar(item.getDestinationRoute())
+                        onBottomNavItemClick = {
+                            navigateBottomBar(item.getFirstSubcategoryRoute())
                             closeNavigationDrawer()
                         },
                         selected = isItemSelected(item)
@@ -96,13 +96,13 @@ fun RowScope.AppBottomNavigationBarItem(
     modifier: Modifier = Modifier,
     icon: DrawableResource,
     label: String,
-    onClick: () -> Unit,
+    onBottomNavItemClick: () -> Unit,
     selected: Boolean,
 ) {
     Column(
         modifier = modifier
             .weight(1f)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onBottomNavItemClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -113,7 +113,7 @@ fun RowScope.AppBottomNavigationBarItem(
             colorFilter = if (selected) ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(
                 MaterialTheme.colorScheme.outline
             ),
-            modifier = Modifier.clickable { onClick() }.size(24.dp)
+            modifier = Modifier.size(24.dp)
         )
 
         Text(
