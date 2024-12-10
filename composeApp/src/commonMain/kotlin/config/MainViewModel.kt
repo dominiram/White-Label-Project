@@ -8,12 +8,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import models.MainConfig
 import networking.ApiStatus
-import org.lighthousegames.logging.logging
 import repos.config.ConfigRepository
 
 class MainViewModel(private val configRepository: ConfigRepository) : ViewModel() {
-    private val log = logging("MainViewModel")
-
     private val _homeState = MutableStateFlow(HomeState())
 
     val homeViewState = _homeState.asStateFlow()
@@ -25,7 +22,6 @@ class MainViewModel(private val configRepository: ConfigRepository) : ViewModel(
     private fun getConfig() = viewModelScope.launch {
         try {
             configRepository.getAppConfig().collect { response ->
-                log.d { "MainViewModel response.data = ${response.data}" }
                 when (response.status) {
                     ApiStatus.LOADING -> onHomeStateLoading()
                     ApiStatus.SUCCESS -> onHomeStateSuccess(response.data)
@@ -33,7 +29,6 @@ class MainViewModel(private val configRepository: ConfigRepository) : ViewModel(
                 }
             }
         } catch (e: Exception) {
-            log.d { "MainViewModel exception: ${e.message}" }
             e.printStackTrace()
             onHomeStateError("Failed to fetch data")
         }

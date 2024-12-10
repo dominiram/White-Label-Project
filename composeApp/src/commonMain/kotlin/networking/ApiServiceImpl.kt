@@ -6,17 +6,20 @@ import io.ktor.client.request.get
 import io.ktor.http.encodeURLQueryComponent
 import kotlinx.coroutines.flow.Flow
 import models.MainConfig
+import models.MainConfigWrapper
+import org.lighthousegames.logging.logging
 import whitelabelproject.buildKonfig.BuildKonfig
 
 class ApiServiceImpl(private val httpClient: HttpClient) : ApiService {
+    private val log = logging("ApiService")
 
     override suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>> {
-        val apiKey = "Q/JE31Su;H%Z*8.KuHY"
+        val apiKey = "%Q/JE31Su;H%Z*8.KuHY"
         val encodedApiKey = apiKey.encodeURLQueryComponent()
 
-        return toResultFlow {
+        return toNetworkResultFlow {
             val result = httpClient.get(BuildKonfig.BASE_URL + CONFIG_URL_PART + encodedApiKey)
-                .body<MainConfig>()
+                .body<MainConfigWrapper>().result
 
             NetworkResult.Success(result)
         }

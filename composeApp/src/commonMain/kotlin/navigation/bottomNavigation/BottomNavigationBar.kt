@@ -47,7 +47,7 @@ fun BottomNavigationBar(
                         icon = item.tabIcon,
                         label = item.name!!,
                         onClick = {
-                            navigateBottomBar(item.route!!)
+                            navigateBottomBar(item.getDestinationRoute())
                             closeNavigationDrawer()
                         },
                         selected = isItemSelected(item)

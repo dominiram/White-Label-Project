@@ -16,19 +16,26 @@ import whitelabelproject.composeapp.generated.resources.ic_search
 @Serializable
 data class MainNavigationItem(
     @SerialName("id") val id: Long? = null,
-    @SerialName("slug") val route: String? = null,
+    @SerialName("slug") val slug: String? = null,
     @SerialName("url") val url: String? = null,
     @SerialName("title") val name: String? = null,
     @SerialName("icon") val icon: String? = null,
-    @SerialName("right_menu") val subCategories: List<NavigationItem>? = arrayListOf(),
+    @SerialName("right_menu") val rightSubCategories: List<NavigationItem>? = null,
+    @SerialName("left_menu") val leftSubCategories: List<NavigationItem>? = null,
 ) {
+    val subCategories: List<NavigationItem>? = rightSubCategories ?: leftSubCategories
+    val route = slug ?: ""
+
     @Contextual
-    val tabIcon = when(icon) {
+    val tabIcon = when (icon) {
         ICON_PATH_HOME -> Res.drawable.ic_home
         ICON_PATH_NEWS -> Res.drawable.ic_news
         ICON_PATH_SEARCH -> Res.drawable.ic_search
         else -> Res.drawable.compose_multiplatform
     }
+
+    fun getDestinationRoute(): String =
+        subCategories.takeIf { !it.isNullOrEmpty() }?.get(0)?.let { "$route/$it" } ?: route
 }
 
 @Serializable

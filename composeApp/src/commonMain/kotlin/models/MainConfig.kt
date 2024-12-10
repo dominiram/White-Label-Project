@@ -8,8 +8,14 @@ import whitelabelproject.composeapp.generated.resources.ic_news
 import whitelabelproject.composeapp.generated.resources.ic_search
 
 @Serializable
+data class MainConfigWrapper(
+    @SerialName("result") val result: MainConfig,
+)
+
+@Serializable
 data class MainConfig(
-    @SerialName("languages") val languageList: List<LanguageResponse>
+    @SerialName("languages") val languageList: List<LanguageResponse>,
+
 )
 
 @Serializable

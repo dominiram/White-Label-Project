@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,7 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
-import models.NavigationItem
 import navigation.bottomNavigation.Constants.ENTER_DURATION
 import org.koin.compose.viewmodel.koinViewModel
 import screens.home.HomeScreen
@@ -31,55 +31,9 @@ import screens.home.WebViewScreen
 fun MainBottomNavigation() {
     val viewModel = koinViewModel<BottomNavigationViewModel>()
     val navController = rememberNavController()
-    val homeItem = DestinationRoutes.MainNavigationRoutes.Home
-    val reelsItem = DestinationRoutes.MainNavigationRoutes.News
-    val webViewItem = DestinationRoutes.MainNavigationRoutes.WebView
-    val profileItem = DestinationRoutes.MainNavigationRoutes.Search
 
     val drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed)
     val scope: CoroutineScope = rememberCoroutineScope()
-
-//    val navigationItems = listOf(
-//        MainNavigationItem(
-//            route = homeItem.route,
-//            url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-//            name = homeItem.title,
-//            icon = homeItem.icon,
-//            subCategories = listOf(
-//                NavigationItem(
-//                    route = homeItem.route,
-//                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-//                    name = homeItem.title
-//                ),
-//                NavigationItem(
-//                    route = reelsItem.route,
-//                    url = "https://github.com/",
-//                    name = reelsItem.title
-//                ),
-//                NavigationItem(
-//                    route = webViewItem.route,
-//                    url = "https://youtube.com/",
-//                    name = webViewItem.title
-//                )
-//            ),
-//        ),
-//
-//        MainNavigationItem(
-//            route = reelsItem.route,
-//            url = "https://github.com/",
-//            name = reelsItem.title,
-//            icon = reelsItem.icon,
-//            subCategories = arrayListOf(),
-//        ),
-//
-//        MainNavigationItem(
-//            route = profileItem.route,
-//            url = "https://google.com/",
-//            name = profileItem.title,
-//            icon = profileItem.icon,
-//            subCategories = arrayListOf()
-//        )
-//    )
 
     val navigationItems = viewModel.getBottomNavigationItems()
 
@@ -106,15 +60,17 @@ fun NavHostMain(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
     var selectedTabItem: MainNavigationItem = remember { mainNavigationItems[0] }
-    val shouldShowBottomAppBar = remember(backStackEntry) { navController.shouldShowBottomBar() }
+
+    val shouldShowBottomAppBar =
+        remember(backStackEntry) { mainNavigationItems.find { it == selectedTabItem } != null }
 
     Scaffold(
         topBar = {
             TopBar(
-                title = getTitle(currentScreen),
-                canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
-                hasGotLeftSubNavigation = true,
-                hasGotRightSubNavigation = false,
+                title = selectedTabItem.name ?: "",
+                canNavigateBack = !shouldShowBottomAppBar,
+                hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
+                hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
                 navigateUp = { navController.navigateUp() }
             )
@@ -123,16 +79,24 @@ fun NavHostMain(
             BottomNavigationBar(
                 mainNavigationItems = mainNavigationItems,
                 shouldShowBottomAppBar = shouldShowBottomAppBar,
-                navigateBottomBar = { route -> navigateBottomBar(navController, route) },
+                navigateBottomBar = { route ->
+                    navigateBottomBar(
+                        navController = navController,
+                        beginning = mainNavigationItems[0].route,
+                        destination = route
+                    )
+                    mainNavigationItems.find { it.getDestinationRoute() == route }?.let {
+                        selectedTabItem = it
+                    }
+                },
                 isItemSelected = { item -> isItemSelected(navController, item) },
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }
     ) { innerPadding ->
-
         NavHost(
             navController = navController,
-            startDestination = DestinationRoutes.MainNavigationRoutes.Home.route,
+            startDestination = mainNavigationItems[0].route,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
@@ -164,7 +128,7 @@ fun NavHostMain(
             mainNavigationItems.forEach { navigationItem ->
                 navigationItem.subCategories.takeIf { it?.isNotEmpty() == true }?.forEach { item ->
                     item.route?.let {
-                        composable(route = it) {
+                        composable(route = navigationItem.getDestinationRoute()) {
                             if (navController.currentBackStackEntry?.destination?.route == item.route)
                                 selectedTabItem = navigationItem
 
@@ -197,22 +161,20 @@ fun NavHostMain(
                             }
                         }
                     }
-                } ?: navigationItem.route?.let {
-                    composable(route = it) {
-                        if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
-                            selectedTabItem = navigationItem
+                } ?: composable(route = navigationItem.route) {
+                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
+                        selectedTabItem = navigationItem
 
-                        navigationItem.url?.let { webViewUrl ->
-                            HomeScreen(
-                                webViewUrl = webViewUrl,
-                                onNavigate = { routeName ->
-                                    onNavigate(routeName)
-                                    scope.launch { drawerState.close() }
-                                },
-                                subCategories = navigationItem.subCategories ?: arrayListOf(),
-                                drawerState = drawerState
-                            )
-                        }
+                    navigationItem.url?.let { webViewUrl ->
+                        HomeScreen(
+                            webViewUrl = webViewUrl,
+                            onNavigate = { routeName ->
+                                onNavigate(routeName)
+                                scope.launch { drawerState.close() }
+                            },
+                            subCategories = navigationItem.subCategories ?: arrayListOf(),
+                            drawerState = drawerState
+                        )
                     }
                 }
             }

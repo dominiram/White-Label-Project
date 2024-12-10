@@ -20,28 +20,28 @@ sealed class DestinationRoutes(
     ) : DestinationRoutes(route, title, icon, tabIcon) {
 
         data object Home : MainNavigationRoutes(
-            route = "HOME",
+            route = "home",
             title = "Home",
             icon = "ic_home",
             tabIcon = Res.drawable.ic_home,
         )
 
         data object Search : MainNavigationRoutes(
-            route = "SEARCH",
+            route = "search",
             title = "Search",
             icon = "ic_search",
             tabIcon = Res.drawable.ic_search,
         )
 
         data object News : MainNavigationRoutes(
-            route = "NEWS",
+            route = "news",
             title = "News",
             icon = "ic_news",
             tabIcon = Res.drawable.ic_news,
         )
 
         data object WebView: MainNavigationRoutes(
-            route = "WEB_VIEW",
+            route = "web_view",
             title = "Web View",
             icon = "ic_home",
             tabIcon = Res.drawable.ic_home,
@@ -49,7 +49,7 @@ sealed class DestinationRoutes(
     }
 
     data object NewsDetails : DestinationRoutes(
-        route = "NEWS_DETAILS",
+        route = "news_details",
         title = "NewsDetails",
         icon = "ic_news",
         tabIcon = Res.drawable.ic_news,
