@@ -138,7 +138,7 @@ fun NavHostMain(
                     item.route?.let {
                         composable(route = item.getFullRoute()) {
                             when {
-                                item.isWebView() -> navigationItem.url?.let { webViewUrl ->
+                                item.isWebView() -> item.url?.let { webViewUrl ->
                                     WebViewScreen(
                                         webViewUrl = webViewUrl,
                                         onNavigate = { routeName ->
@@ -151,7 +151,7 @@ fun NavHostMain(
                                     )
                                 }
 
-                                else -> navigationItem.url?.let { webViewUrl ->
+                                else -> item.url?.let { webViewUrl ->
                                     HomeScreen(
                                         webViewUrl = webViewUrl,
                                         onNavigate = { routeName ->
