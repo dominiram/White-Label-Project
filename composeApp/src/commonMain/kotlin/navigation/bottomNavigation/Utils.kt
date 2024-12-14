@@ -15,18 +15,20 @@ fun navigateTo(
     }
 }
 
-fun navigateBottomBar(navController: NavController, beginning: String, destination: String) =
-    navController.navigate(destination) {
+fun navigateBottomBar(navController: NavController, beginning: String, destination: String) {
+    if (navController.findDestination(destination) != null)
+        navController.navigate(destination) {
 
-        navController.graph.startDestinationRoute?.let {
-            popUpTo(beginning) {
-                saveState = true
+            navController.graph.startDestinationRoute?.let {
+                popUpTo(beginning) {
+                    saveState = true
+                }
             }
-        }
 
-        launchSingleTop = true
-        restoreState = true
-    }
+            launchSingleTop = true
+            restoreState = true
+        }
+}
 
 fun isItemSelected(navController: NavHostController, item: MainNavigationItem): Boolean =
     navController.currentBackStackEntry?.destination?.route?.substringBeforeLast('/') == item.route
