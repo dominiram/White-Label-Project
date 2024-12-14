@@ -50,7 +50,7 @@ fun BottomNavigationBar(
                             navigateBottomBar(item.getFirstSubcategoryRoute())
                             closeNavigationDrawer()
                         },
-                        selected = isItemSelected(item)
+                        isSelected = isItemSelected(item)
                     )
             }
         }
@@ -97,7 +97,7 @@ fun RowScope.AppBottomNavigationBarItem(
     icon: DrawableResource,
     label: String,
     onBottomNavItemClick: () -> Unit,
-    selected: Boolean,
+    isSelected: Boolean,
 ) {
     Column(
         modifier = modifier
@@ -110,7 +110,7 @@ fun RowScope.AppBottomNavigationBarItem(
             painter = painterResource(icon),
             contentDescription = icon.toString(),
             contentScale = ContentScale.Crop,
-            colorFilter = if (selected) ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(
+            colorFilter = if (isSelected) ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(
                 MaterialTheme.colorScheme.outline
             ),
             modifier = Modifier.size(24.dp)
@@ -119,8 +119,8 @@ fun RowScope.AppBottomNavigationBarItem(
         Text(
             text = label,
             style = TextStyle(
-                fontWeight = if (selected) FontWeight(700) else FontWeight(400),
-                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                fontWeight = if (isSelected) FontWeight(700) else FontWeight(400),
+                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
             )
         )
     }

@@ -1,7 +1,6 @@
 package navigation.bottomNavigation
 
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import models.MainNavigationItem
 import navigation.bottomNavigation.Constants.BACK_CLICK_ROUTE
 
@@ -15,7 +14,7 @@ fun navigateTo(
     }
 }
 
-fun navigateBottomBar(navController: NavController, beginning: String, destination: String) {
+fun navigateBottomBar(navController: NavController, beginning: String, destination: String): Unit? =
     if (navController.findDestination(destination) != null)
         navController.navigate(destination) {
 
@@ -27,8 +26,7 @@ fun navigateBottomBar(navController: NavController, beginning: String, destinati
 
             launchSingleTop = true
             restoreState = true
-        }
-}
+        } else null
 
-fun isItemSelected(navController: NavHostController, item: MainNavigationItem): Boolean =
-    navController.currentBackStackEntry?.destination?.route?.substringBeforeLast('/') == item.route
+fun isItemSelected(selectedItem: MainNavigationItem, item: MainNavigationItem): Boolean =
+    selectedItem.route == item.route.substringBeforeLast('/')

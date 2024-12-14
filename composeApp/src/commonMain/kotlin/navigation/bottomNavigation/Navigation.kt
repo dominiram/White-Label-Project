@@ -87,17 +87,17 @@ fun NavHostMain(
                 mainNavigationItems = mainNavigationItems,
                 shouldShowBottomAppBar = shouldShowBottomAppBar,
                 navigateBottomBar = { route ->
-                    mainNavigationItems.find { it.getFirstSubcategoryRoute() == route }?.let {
-                        selectedTabItem = it
-                    }
-
                     navigateBottomBar(
                         navController = navController,
                         beginning = mainNavigationItems[0].route,
                         destination = route
-                    )
+                    )?.let {
+                        mainNavigationItems.find { it.getFirstSubcategoryRoute() == route }?.let {
+                            selectedTabItem = it
+                        }
+                    }
                 },
-                isItemSelected = { item -> isItemSelected(navController, item) },
+                isItemSelected = { item -> isItemSelected(selectedTabItem, item) },
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }
