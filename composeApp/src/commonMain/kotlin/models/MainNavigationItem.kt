@@ -5,13 +5,17 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import models.NavigationItemConstants.ICON_PATH_HOME
 import models.NavigationItemConstants.ICON_PATH_NEWS
+import models.NavigationItemConstants.ICON_PATH_RADIO
 import models.NavigationItemConstants.ICON_PATH_SEARCH
+import models.NavigationItemConstants.ICON_PATH_TV
 import navigation.bottomNavigation.Constants.WEB_VIEW_ROUTE
 import whitelabelproject.composeapp.generated.resources.Res
 import whitelabelproject.composeapp.generated.resources.compose_multiplatform
 import whitelabelproject.composeapp.generated.resources.ic_home
 import whitelabelproject.composeapp.generated.resources.ic_news
+import whitelabelproject.composeapp.generated.resources.ic_radio
 import whitelabelproject.composeapp.generated.resources.ic_search
+import whitelabelproject.composeapp.generated.resources.ic_tv
 
 @Serializable
 data class MainNavigationItem(
@@ -30,6 +34,8 @@ data class MainNavigationItem(
     val tabIcon = when (icon) {
         ICON_PATH_HOME -> Res.drawable.ic_home
         ICON_PATH_NEWS -> Res.drawable.ic_news
+        ICON_PATH_RADIO -> Res.drawable.ic_radio
+        ICON_PATH_TV -> Res.drawable.ic_tv
         ICON_PATH_SEARCH -> Res.drawable.ic_search
         else -> Res.drawable.compose_multiplatform
     }
