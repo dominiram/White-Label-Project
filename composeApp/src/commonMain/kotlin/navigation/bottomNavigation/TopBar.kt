@@ -17,7 +17,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -82,6 +81,8 @@ fun NavigationDrawer(
 @Composable
 fun TopBar(
     title: String,
+    backgroundColor: Long,
+    textIconActiveColor: Long,
     canNavigateBack: Boolean,
     hasGotLeftSubNavigation: Boolean,
     hasGotRightSubNavigation: Boolean,
@@ -100,6 +101,7 @@ fun TopBar(
                     Icon(
                         modifier = Modifier.clickable { onDrawerClicked() },
                         imageVector = Icons.Default.Menu,
+                        tint = Color(textIconActiveColor),
                         contentDescription = null
                     )
 
@@ -109,12 +111,14 @@ fun TopBar(
                     Icon(
                         modifier = Modifier.padding(end = 8.dp).clickable { onDrawerClicked() },
                         imageVector = Icons.Default.Menu,
+                        tint = Color(textIconActiveColor),
                         contentDescription = null
                     )
             }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = Color(backgroundColor),
+            titleContentColor = Color(textIconActiveColor)
         ),
         modifier = modifier,
         navigationIcon = {
@@ -122,6 +126,7 @@ fun TopBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        tint = Color(textIconActiveColor),
                         contentDescription = null
                     )
                 }

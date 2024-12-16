@@ -27,6 +27,9 @@ import navigation.bottomNavigation.Constants.ENTER_DURATION
 import org.koin.compose.viewmodel.koinViewModel
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
+import utils.Constants.MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
+import utils.Constants.MAIN_NAVIGATION_BACKGROUND_COLOR
+import utils.Constants.MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
 
 @Composable
 fun MainBottomNavigation() {
@@ -37,6 +40,9 @@ fun MainBottomNavigation() {
     val scope: CoroutineScope = rememberCoroutineScope()
 
     val navigationItems = viewModel.getBottomNavigationItems()
+    val backgroundColor = MAIN_NAVIGATION_BACKGROUND_COLOR
+    val textIconActiveColor = MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
+    val textIconInactiveColor = MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
 
     NavHostMain(
         drawerState = drawerState,
@@ -46,7 +52,10 @@ fun MainBottomNavigation() {
             navigateTo(routeName, navController)
             scope.launch { drawerState.close() }
         },
-        mainNavigationItems = navigationItems
+        mainNavigationItems = navigationItems,
+        backgroundColor = backgroundColor,
+        textIconActiveColor = textIconActiveColor,
+        textIconInactiveColor = textIconInactiveColor
     )
 }
 
@@ -56,7 +65,10 @@ fun NavHostMain(
     scope: CoroutineScope,
     navController: NavHostController = rememberNavController(),
     onNavigate: (rootName: String) -> Unit,
-    mainNavigationItems: List<MainNavigationItem> = arrayListOf()
+    mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
+    backgroundColor: Long,
+    textIconActiveColor: Long,
+    textIconInactiveColor: Long
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
@@ -75,6 +87,8 @@ fun NavHostMain(
         topBar = {
             TopBar(
                 title = selectedTabItemTitle,
+                backgroundColor = backgroundColor,
+                textIconActiveColor = textIconActiveColor,
                 canNavigateBack = !shouldShowBottomAppBar,
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
@@ -98,6 +112,9 @@ fun NavHostMain(
                     }
                 },
                 isItemSelected = { item -> isItemSelected(selectedTabItem, item) },
+                backgroundColor = backgroundColor,
+                textIconActiveColor = textIconActiveColor,
+                textIconInactiveColor = textIconInactiveColor,
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }

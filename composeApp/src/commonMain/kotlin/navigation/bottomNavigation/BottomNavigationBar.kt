@@ -1,6 +1,7 @@
 package navigation.bottomNavigation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -32,6 +34,9 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BottomNavigationBar(
+    backgroundColor: Long,
+    textIconActiveColor: Long,
+    textIconInactiveColor: Long,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
     shouldShowBottomAppBar: Boolean,
     navigateBottomBar: (String) -> Unit,
@@ -40,12 +45,15 @@ fun BottomNavigationBar(
 ) {
     AppBottomNavigationBar(
         shouldShowBottomAppBar = shouldShowBottomAppBar,
+        backgroundColor = backgroundColor,
         content = {
             mainNavigationItems.forEach { item ->
                 if (listOf(item.route, item.name).all { it != null })
                     AppBottomNavigationBarItem(
                         icon = item.tabIcon,
                         label = item.name!!,
+                        textIconActiveColor = textIconActiveColor,
+                        textIconInactiveColor = textIconInactiveColor,
                         onBottomNavItemClick = {
                             navigateBottomBar(item.getFirstSubcategoryRoute())
                             closeNavigationDrawer()
@@ -61,12 +69,13 @@ fun BottomNavigationBar(
 fun AppBottomNavigationBar(
     modifier: Modifier = Modifier,
     shouldShowBottomAppBar: Boolean,
+    backgroundColor: Long,
     content: @Composable (RowScope.() -> Unit),
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.background,
-        contentColor = MaterialTheme.colorScheme.onBackground,
-        modifier = modifier.windowInsetsPadding(BottomAppBarDefaults.windowInsets)
+        color = Color(backgroundColor),
+        contentColor = Color(backgroundColor),
+        modifier = modifier.background(color = Color(backgroundColor)).windowInsetsPadding(BottomAppBarDefaults.windowInsets)
     ) {
         if (shouldShowBottomAppBar) {
             Column {
@@ -95,6 +104,8 @@ fun AppBottomNavigationBar(
 fun RowScope.AppBottomNavigationBarItem(
     modifier: Modifier = Modifier,
     icon: DrawableResource,
+    textIconActiveColor: Long,
+    textIconInactiveColor: Long,
     label: String,
     onBottomNavItemClick: () -> Unit,
     isSelected: Boolean,
@@ -110,8 +121,8 @@ fun RowScope.AppBottomNavigationBarItem(
             painter = painterResource(icon),
             contentDescription = icon.toString(),
             contentScale = ContentScale.Crop,
-            colorFilter = if (isSelected) ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(
-                MaterialTheme.colorScheme.outline
+            colorFilter = if (isSelected) ColorFilter.tint(Color(textIconActiveColor)) else ColorFilter.tint(
+                Color(textIconInactiveColor)
             ),
             modifier = Modifier.size(24.dp)
         )
@@ -120,7 +131,7 @@ fun RowScope.AppBottomNavigationBarItem(
             text = label,
             style = TextStyle(
                 fontWeight = if (isSelected) FontWeight(700) else FontWeight(400),
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                color = if (isSelected) Color(textIconActiveColor) else Color(textIconInactiveColor)
             )
         )
     }
