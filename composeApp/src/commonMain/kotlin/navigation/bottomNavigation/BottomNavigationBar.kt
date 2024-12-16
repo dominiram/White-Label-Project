@@ -1,7 +1,6 @@
 package navigation.bottomNavigation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -75,7 +74,7 @@ fun AppBottomNavigationBar(
     Surface(
         color = Color(backgroundColor),
         contentColor = Color(backgroundColor),
-        modifier = modifier.background(color = Color(backgroundColor)).windowInsetsPadding(BottomAppBarDefaults.windowInsets)
+        modifier = modifier.windowInsetsPadding(BottomAppBarDefaults.windowInsets)
     ) {
         if (shouldShowBottomAppBar) {
             Column {
