@@ -2,7 +2,7 @@ package navigation.bottomNavigation
 
 import androidx.navigation.NavController
 import models.MainNavigationItem
-import navigation.bottomNavigation.Constants.BACK_CLICK_ROUTE
+import utils.Constants.BACK_CLICK_ROUTE
 
 fun navigateTo(
     routeName: String,

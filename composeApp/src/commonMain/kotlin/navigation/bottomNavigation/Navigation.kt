@@ -23,10 +23,10 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
-import navigation.bottomNavigation.Constants.ENTER_DURATION
 import org.koin.compose.viewmodel.koinViewModel
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
+import utils.Constants.ENTER_DURATION
 import utils.Constants.MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
 import utils.Constants.MAIN_NAVIGATION_BACKGROUND_COLOR
 import utils.Constants.MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
@@ -158,6 +158,7 @@ fun NavHostMain(
                                 item.isWebView() -> item.url?.let { webViewUrl ->
                                     WebViewScreen(
                                         webViewUrl = webViewUrl,
+                                        progressColor = backgroundColor,
                                         onNavigate = { routeName ->
                                             onNavigate(routeName)
                                             scope.launch { drawerState.close() }
@@ -171,6 +172,7 @@ fun NavHostMain(
                                 else -> item.url?.let { webViewUrl ->
                                     HomeScreen(
                                         webViewUrl = webViewUrl,
+                                        progressColor = backgroundColor,
                                         onNavigate = { routeName ->
                                             onNavigate(routeName)
                                             scope.launch { drawerState.close() }
@@ -187,6 +189,7 @@ fun NavHostMain(
                     navigationItem.url?.let { webViewUrl ->
                         HomeScreen(
                             webViewUrl = webViewUrl,
+                            progressColor = backgroundColor,
                             onNavigate = { routeName ->
                                 onNavigate(routeName)
                                 scope.launch { drawerState.close() }

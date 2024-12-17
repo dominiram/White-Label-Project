@@ -8,7 +8,7 @@ import models.NavigationItemConstants.ICON_PATH_NEWS
 import models.NavigationItemConstants.ICON_PATH_RADIO
 import models.NavigationItemConstants.ICON_PATH_SEARCH
 import models.NavigationItemConstants.ICON_PATH_TV
-import navigation.bottomNavigation.Constants.WEB_VIEW_ROUTE
+import utils.Constants.WEB_VIEW_ROUTE
 import whitelabelproject.composeapp.generated.resources.Res
 import whitelabelproject.composeapp.generated.resources.compose_multiplatform
 import whitelabelproject.composeapp.generated.resources.ic_home

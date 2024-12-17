@@ -10,8 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun LoadingIndicatorScreen() {
+fun LoadingIndicatorScreen(progressColor: Long) {
     Box(modifier = Modifier.fillMaxSize().background(color = Color.White)) {
-        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center),
+            color = Color(progressColor)
+        )
     }
 }
