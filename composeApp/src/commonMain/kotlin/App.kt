@@ -6,11 +6,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import pushNotifications.initPushNotifications
 
+var isKoinInitialized = false
+
 @Composable
 @Preview
 fun App() {
 
-    initKoin()
+    if (!isKoinInitialized) {
+        initKoin()
+        isKoinInitialized = true
+    }
+
     initPushNotifications()
 
     val viewModel = koinViewModel<AppViewModel>()
