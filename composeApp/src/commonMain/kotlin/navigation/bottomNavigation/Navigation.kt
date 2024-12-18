@@ -10,8 +10,10 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -21,63 +23,26 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
-import models.NavigationItem
-import navigation.bottomNavigation.Constants.ENTER_DURATION
+import org.koin.compose.viewmodel.koinViewModel
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
+import utils.Constants.ENTER_DURATION
+import utils.Constants.MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
+import utils.Constants.MAIN_NAVIGATION_BACKGROUND_COLOR
+import utils.Constants.MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
 
 @Composable
 fun MainBottomNavigation() {
+    val viewModel = koinViewModel<BottomNavigationViewModel>()
     val navController = rememberNavController()
-    val homeItem = DestinationRoutes.MainNavigationRoutes.Home
-    val reelsItem = DestinationRoutes.MainNavigationRoutes.News
-    val webViewItem = DestinationRoutes.MainNavigationRoutes.WebView
-    val profileItem = DestinationRoutes.MainNavigationRoutes.Search
 
     val drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed)
     val scope: CoroutineScope = rememberCoroutineScope()
 
-    val navigationItems = listOf(
-        MainNavigationItem(
-            route = homeItem.route,
-            url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-            name = homeItem.title,
-            tabIcon = homeItem.tabIcon,
-            subCategories = listOf(
-                NavigationItem(
-                    route = homeItem.route,
-                    url = "https://github.com/KevinnZou/compose-webview-multiplatform",
-                    name = homeItem.title
-                ),
-                NavigationItem(
-                    route = reelsItem.route,
-                    url = "https://github.com/",
-                    name = reelsItem.title
-                ),
-                NavigationItem(
-                    route = webViewItem.route,
-                    url = "https://youtube.com/",
-                    name = webViewItem.title
-                )
-            ),
-        ),
-
-        MainNavigationItem(
-            route = reelsItem.route,
-            url = "https://github.com/",
-            name = reelsItem.title,
-            tabIcon = reelsItem.tabIcon,
-            subCategories = arrayListOf(),
-        ),
-
-        MainNavigationItem(
-            route = profileItem.route,
-            url = "https://google.com/",
-            name = profileItem.title,
-            tabIcon = profileItem.tabIcon,
-            subCategories = arrayListOf()
-        )
-    )
+    val navigationItems = viewModel.getBottomNavigationItems()
+    val backgroundColor = MAIN_NAVIGATION_BACKGROUND_COLOR
+    val textIconActiveColor = MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
+    val textIconInactiveColor = MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
 
     NavHostMain(
         drawerState = drawerState,
@@ -87,7 +52,10 @@ fun MainBottomNavigation() {
             navigateTo(routeName, navController)
             scope.launch { drawerState.close() }
         },
-        mainNavigationItems = navigationItems
+        mainNavigationItems = navigationItems,
+        backgroundColor = backgroundColor,
+        textIconActiveColor = textIconActiveColor,
+        textIconInactiveColor = textIconInactiveColor
     )
 }
 
@@ -97,20 +65,33 @@ fun NavHostMain(
     scope: CoroutineScope,
     navController: NavHostController = rememberNavController(),
     onNavigate: (rootName: String) -> Unit,
-    mainNavigationItems: List<MainNavigationItem> = arrayListOf()
+    mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
+    backgroundColor: Long,
+    textIconActiveColor: Long,
+    textIconInactiveColor: Long
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination
-    var selectedTabItem: MainNavigationItem = remember { mainNavigationItems[0] }
-    val shouldShowBottomAppBar = remember(backStackEntry) { navController.shouldShowBottomBar() }
+    var selectedTabItem: MainNavigationItem by remember { mutableStateOf(mainNavigationItems[0]) }
+
+    val selectedTabItemTitle by remember(selectedTabItem) {
+        mutableStateOf(
+            selectedTabItem.name ?: ""
+        )
+    }
+
+    val shouldShowBottomAppBar =
+        remember(backStackEntry) { mainNavigationItems.find { it == selectedTabItem } != null }
 
     Scaffold(
         topBar = {
             TopBar(
-                title = getTitle(currentScreen),
-                canNavigateBack = currentScreen?.route?.isNotMainNavigationRoute() == true,
-                hasGotLeftSubNavigation = true,
-                hasGotRightSubNavigation = false,
+                title = selectedTabItemTitle,
+                backgroundColor = backgroundColor,
+                textIconActiveColor = textIconActiveColor,
+                canNavigateBack = !shouldShowBottomAppBar,
+                hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
+                hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
                 navigateUp = { navController.navigateUp() }
             )
@@ -119,16 +100,28 @@ fun NavHostMain(
             BottomNavigationBar(
                 mainNavigationItems = mainNavigationItems,
                 shouldShowBottomAppBar = shouldShowBottomAppBar,
-                navigateBottomBar = { route -> navigateBottomBar(navController, route) },
-                isItemSelected = { item -> isItemSelected(navController, item) },
+                navigateBottomBar = { route ->
+                    navigateBottomBar(
+                        navController = navController,
+                        beginning = mainNavigationItems[0].route,
+                        destination = route
+                    )?.let {
+                        mainNavigationItems.find { it.getFirstSubcategoryRoute() == route }?.let {
+                            selectedTabItem = it
+                        }
+                    }
+                },
+                isItemSelected = { item -> isItemSelected(selectedTabItem, item) },
+                backgroundColor = backgroundColor,
+                textIconActiveColor = textIconActiveColor,
+                textIconInactiveColor = textIconInactiveColor,
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }
     ) { innerPadding ->
-
         NavHost(
             navController = navController,
-            startDestination = DestinationRoutes.MainNavigationRoutes.Home.route,
+            startDestination = mainNavigationItems[0].route,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
@@ -158,46 +151,53 @@ fun NavHostMain(
             }
         ) {
             mainNavigationItems.forEach { navigationItem ->
-                navigationItem.subCategories.takeIf { it.isNotEmpty() }?.forEach { item ->
-                    composable(route = item.route) {
-                        if (navController.currentBackStackEntry?.destination?.route == item.route)
-                            selectedTabItem = navigationItem
+                navigationItem.subCategories.takeIf { it?.isNotEmpty() == true }?.forEach { item ->
+                    item.route?.let {
+                        composable(route = item.getFullRoute()) {
+                            when {
+                                item.isWebView() -> item.url?.let { webViewUrl ->
+                                    WebViewScreen(
+                                        webViewUrl = webViewUrl,
+                                        progressColor = backgroundColor,
+                                        onNavigate = { routeName ->
+                                            onNavigate(routeName)
+                                            scope.launch { drawerState.close() }
+                                        },
+                                        subCategories = navigationItem.subCategories
+                                            ?: arrayListOf(),
+                                        drawerState = drawerState
+                                    )
+                                }
 
-                        when {
-                            item.isWebView() -> WebViewScreen(
-                                webViewUrl = navigationItem.url,
-                                onNavigate = { routeName ->
-                                    onNavigate(routeName)
-                                    scope.launch { drawerState.close() }
-                                },
-                                subCategories = navigationItem.subCategories,
-                                drawerState = drawerState
-                            )
-
-                            else -> HomeScreen(
-                                webViewUrl = navigationItem.url,
-                                onNavigate = { routeName ->
-                                    onNavigate(routeName)
-                                    scope.launch { drawerState.close() }
-                                },
-                                subCategories = navigationItem.subCategories,
-                                drawerState = drawerState
-                            )
+                                else -> item.url?.let { webViewUrl ->
+                                    HomeScreen(
+                                        webViewUrl = webViewUrl,
+                                        progressColor = backgroundColor,
+                                        onNavigate = { routeName ->
+                                            onNavigate(routeName)
+                                            scope.launch { drawerState.close() }
+                                        },
+                                        subCategories = navigationItem.subCategories
+                                            ?: arrayListOf(),
+                                        drawerState = drawerState
+                                    )
+                                }
+                            }
                         }
                     }
                 } ?: composable(route = navigationItem.route) {
-                    if (navController.currentBackStackEntry?.destination?.route == navigationItem.route)
-                        selectedTabItem = navigationItem
-
-                    HomeScreen(
-                        webViewUrl = navigationItem.url,
-                        onNavigate = { routeName ->
-                            onNavigate(routeName)
-                            scope.launch { drawerState.close() }
-                        },
-                        subCategories = navigationItem.subCategories,
-                        drawerState = drawerState
-                    )
+                    navigationItem.url?.let { webViewUrl ->
+                        HomeScreen(
+                            webViewUrl = webViewUrl,
+                            progressColor = backgroundColor,
+                            onNavigate = { routeName ->
+                                onNavigate(routeName)
+                                scope.launch { drawerState.close() }
+                            },
+                            subCategories = navigationItem.subCategories ?: arrayListOf(),
+                            drawerState = drawerState
+                        )
+                    }
                 }
             }
         }

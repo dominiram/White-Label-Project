@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -15,7 +16,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -55,10 +56,15 @@ fun NavigationDrawer(
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    navigationItems.forEach {
-                        SubCategory(
-                            title = it.name,
-                            onClick = { onNavigationItemClicked(it.route) }
+                    navigationItems.forEach { subCategory ->
+                        if (listOf(
+                                subCategory.name,
+                                subCategory.parentRoute,
+                                subCategory.route
+                            ).all { it != null }
+                        ) SubCategory(
+                            title = subCategory.name!!,
+                            onClick = { onNavigationItemClicked(subCategory.getFullRoute()) }
                         )
                     }
                 }
@@ -75,6 +81,8 @@ fun NavigationDrawer(
 @Composable
 fun TopBar(
     title: String,
+    backgroundColor: Long,
+    textIconActiveColor: Long,
     canNavigateBack: Boolean,
     hasGotLeftSubNavigation: Boolean,
     hasGotRightSubNavigation: Boolean,
@@ -93,6 +101,7 @@ fun TopBar(
                     Icon(
                         modifier = Modifier.clickable { onDrawerClicked() },
                         imageVector = Icons.Default.Menu,
+                        tint = Color(textIconActiveColor),
                         contentDescription = null
                     )
 
@@ -100,25 +109,28 @@ fun TopBar(
 
                 if (hasGotRightSubNavigation)
                     Icon(
-                        modifier = Modifier.clickable { onDrawerClicked() },
+                        modifier = Modifier.padding(end = 8.dp).clickable { onDrawerClicked() },
                         imageVector = Icons.Default.Menu,
+                        tint = Color(textIconActiveColor),
                         contentDescription = null
                     )
             }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = Color(backgroundColor),
+            titleContentColor = Color(textIconActiveColor)
         ),
         modifier = modifier,
         navigationIcon = {
-//            if (canNavigateBack) {
-//                IconButton(onClick = navigateUp) {
-//                    Icon(
-//                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                        contentDescription = null
-//                    )
-//                }
-//            }
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        tint = Color(textIconActiveColor),
+                        contentDescription = null
+                    )
+                }
+            }
         }
     )
 }

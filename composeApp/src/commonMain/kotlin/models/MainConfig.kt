@@ -1,24 +1,33 @@
 package models
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import whitelabelproject.composeapp.generated.resources.Res
 import whitelabelproject.composeapp.generated.resources.ic_home
 import whitelabelproject.composeapp.generated.resources.ic_news
 import whitelabelproject.composeapp.generated.resources.ic_search
 
-data class MainConfig(
-    @SerialName("app_main_config") val appMainConfiguration: String? = null,
-    @SerialName("bottom_navigation_items") val bottomNavigationItems: List<BottomNavigationItem>?
-) {
-    fun getAppMainConfig() = when (appMainConfiguration) {
-        APP_CONFIG_BOTTOM_MAIN_NAVIGATION -> AppMainNavigationConfig.BottomNavigationConfig
-        else -> AppMainNavigationConfig.TopNavigationConfig
-    }
+@Serializable
+data class MainConfigWrapper(
+    @SerialName("result") val result: MainConfig,
+)
 
-    companion object {
-        private const val APP_CONFIG_TOP_MAIN_NAVIGATION = "top"
-        private const val APP_CONFIG_BOTTOM_MAIN_NAVIGATION = "bottom"
-    }
+@Serializable
+data class MainConfig(
+    @SerialName("languages") val languageList: List<LanguageResponse>,
+
+)
+
+@Serializable
+data class LanguageResponse(
+    @SerialName("id") val id: Int? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("code") val code: String? = null,
+    @SerialName("default") val default: Int? = null,
+    @SerialName("top_menu") val topMenu: List<MainNavigationItem>? = null,
+    @SerialName("bottom_menu") val bottomMenu: List<MainNavigationItem>? = null,
+) {
+    val isDefault = default == 1
 }
 
 sealed class AppMainNavigationConfig(val config: String) {
@@ -26,6 +35,7 @@ sealed class AppMainNavigationConfig(val config: String) {
     data object TopNavigationConfig : AppMainNavigationConfig("top")
 }
 
+@Serializable
 data class BottomNavigationItem(
     @SerialName("icon") val icon: String?,
     @SerialName("title") val title: String?,

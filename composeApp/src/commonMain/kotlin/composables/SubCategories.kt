@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SubCategory(title: String, onClick: () -> Unit) {
     Text(
-        modifier = Modifier.padding(start = 12.dp).clickable { onClick() },
+        modifier = Modifier.padding(top = 4.dp, start = 12.dp).clickable { onClick() },
         text = title,
         style = TextStyle(
             fontSize = 20.sp,
