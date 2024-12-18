@@ -12,7 +12,6 @@ import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
 import models.NavigationItem
 import navigation.bottomNavigation.NavigationDrawer
-import org.lighthousegames.logging.logging
 import screens.loading.LoadingIndicatorScreen
 
 @Composable
@@ -26,7 +25,6 @@ fun HomeScreen(
     Surface {
         val webViewState = rememberWebViewState(webViewUrl)
         val isLoading by remember { mutableStateOf(webViewState.isLoading) }
-        val log = logging("HomeScreen")
 
         NavigationDrawer(
             isLeftSide = true,
