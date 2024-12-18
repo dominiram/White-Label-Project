@@ -34,6 +34,7 @@ fun WebViewScreen(
             )
         },
         onNavigationItemClicked = onNavigate,
+        isSubcategorySelected = { subcategoryUrl -> webViewUrl == subcategoryUrl },
         drawerState = drawerState,
         navigationItems = subCategories
     )

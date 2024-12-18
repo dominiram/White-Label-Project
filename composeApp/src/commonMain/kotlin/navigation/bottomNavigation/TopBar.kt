@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
@@ -40,6 +42,7 @@ fun NavigationDrawer(
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     screenContent: @Composable () -> Unit,
     onNavigationItemClicked: (String) -> Unit,
+    isSubcategorySelected: (String?) -> Boolean,
     navigationItems: List<NavigationItem>
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides if (isLeftSide) LayoutDirection.Ltr else LayoutDirection.Rtl) {
@@ -64,7 +67,15 @@ fun NavigationDrawer(
                             ).all { it != null }
                         ) SubCategory(
                             title = subCategory.name!!,
+                            isSelected = isSubcategorySelected(subCategory.url),
                             onClick = { onNavigationItemClicked(subCategory.getFullRoute()) }
+                        )
+
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(color = Color.LightGray)
                         )
                     }
                 }
