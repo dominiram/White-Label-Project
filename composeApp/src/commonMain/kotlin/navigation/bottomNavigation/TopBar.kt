@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -35,6 +36,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import composables.SubCategory
 import models.NavigationItem
+import org.jetbrains.compose.resources.vectorResource
+import whitelabelproject.composeapp.generated.resources.Res
+import whitelabelproject.composeapp.generated.resources.ic_logo
 
 @Composable
 fun NavigationDrawer(
@@ -107,6 +111,16 @@ fun TopBar(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = if (hasGotLeftSubNavigation) Alignment.CenterStart else Alignment.CenterEnd
             ) {
+
+                Icon(
+                    modifier = Modifier
+                        .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
+                        .fillMaxHeight()
+                        .width(120.dp)
+                        .background(Color.White),
+                    imageVector = vectorResource(Res.drawable.ic_logo),
+                    contentDescription = null
+                )
 
                 if (hasGotLeftSubNavigation)
                     Icon(
