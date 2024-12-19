@@ -116,8 +116,7 @@ fun TopBar(
                     modifier = Modifier
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()
-                        .width(120.dp)
-                        .background(Color.White),
+                        .width(80.dp),
                     imageVector = vectorResource(Res.drawable.ic_logo),
                     contentDescription = null
                 )
