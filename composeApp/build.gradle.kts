@@ -123,6 +123,9 @@ kotlin {
             //push notifications
             api(libs.kmpNotifier)
 
+            //permissions
+            implementation(libs.permissions)
+
             //logger
             implementation(libs.logging)
         }
