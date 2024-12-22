@@ -159,10 +159,7 @@ fun NavHostMain(
                                     WebViewScreen(
                                         webViewUrl = webViewUrl,
                                         progressColor = backgroundColor,
-                                        onNavigate = { routeName ->
-                                            onNavigate(routeName)
-                                            scope.launch { drawerState.close() }
-                                        },
+                                        onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
                                             ?: arrayListOf(),
                                         drawerState = drawerState
@@ -173,10 +170,7 @@ fun NavHostMain(
                                     HomeScreen(
                                         webViewUrl = webViewUrl,
                                         progressColor = backgroundColor,
-                                        onNavigate = { routeName ->
-                                            onNavigate(routeName)
-                                            scope.launch { drawerState.close() }
-                                        },
+                                        onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
                                             ?: arrayListOf(),
                                         drawerState = drawerState
@@ -190,10 +184,7 @@ fun NavHostMain(
                         HomeScreen(
                             webViewUrl = webViewUrl,
                             progressColor = backgroundColor,
-                            onNavigate = { routeName ->
-                                onNavigate(routeName)
-                                scope.launch { drawerState.close() }
-                            },
+                            onNavigate = { routeName -> onNavigate(routeName) },
                             subCategories = navigationItem.subCategories ?: arrayListOf(),
                             drawerState = drawerState
                         )
