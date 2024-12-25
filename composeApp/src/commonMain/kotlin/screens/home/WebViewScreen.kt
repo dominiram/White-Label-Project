@@ -19,7 +19,10 @@ fun WebViewScreen(
     progressColor: Long,
     onNavigate: (rootName: String) -> Unit,
     subCategories: List<NavigationItem>,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    backgroundColor: Long,
+    textIconActiveColor: Long,
+    textIconInactiveColor: Long
 ) {
     val webViewState = rememberWebViewState(webViewUrl)
     val isLoading by remember(webViewState) { mutableStateOf(webViewState.isLoading) }
@@ -36,6 +39,9 @@ fun WebViewScreen(
         onNavigationItemClicked = onNavigate,
         isSubcategorySelected = { subcategoryUrl -> webViewUrl == subcategoryUrl },
         drawerState = drawerState,
-        navigationItems = subCategories
+        navigationItems = subCategories,
+        backgroundColor = backgroundColor,
+        textIconActiveColor = textIconActiveColor,
+        textIconInactiveColor = textIconInactiveColor
     )
 }

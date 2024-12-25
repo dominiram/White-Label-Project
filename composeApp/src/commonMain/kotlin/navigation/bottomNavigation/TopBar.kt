@@ -47,7 +47,10 @@ fun NavigationDrawer(
     screenContent: @Composable () -> Unit,
     onNavigationItemClicked: (String) -> Unit,
     isSubcategorySelected: (String?) -> Boolean,
-    navigationItems: List<NavigationItem>
+    navigationItems: List<NavigationItem>,
+    backgroundColor: Long,
+    textIconActiveColor: Long,
+    textIconInactiveColor: Long
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides if (isLeftSide) LayoutDirection.Ltr else LayoutDirection.Rtl) {
         ModalNavigationDrawer(
@@ -59,7 +62,7 @@ fun NavigationDrawer(
                     modifier = Modifier
                         .fillMaxWidth(fraction = 0.8f)
                         .fillMaxHeight()
-                        .background(color = Color.White),
+                        .background(color = Color(backgroundColor)),
                     verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
                     horizontalAlignment = Alignment.Start
                 ) {
@@ -72,7 +75,9 @@ fun NavigationDrawer(
                         ) SubCategory(
                             title = subCategory.name!!,
                             isSelected = isSubcategorySelected(subCategory.url),
-                            onClick = { onNavigationItemClicked(subCategory.getFullRoute()) }
+                            onClick = { onNavigationItemClicked(subCategory.getFullRoute()) },
+                            activeColor = textIconActiveColor,
+                            inactiveColor = textIconInactiveColor
                         )
 
                         HorizontalDivider(

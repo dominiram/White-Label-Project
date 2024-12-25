@@ -27,9 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
 import utils.Constants.ENTER_DURATION
-import utils.Constants.MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
-import utils.Constants.MAIN_NAVIGATION_BACKGROUND_COLOR
-import utils.Constants.MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
+import utils.toColor
 
 @Composable
 fun MainBottomNavigation() {
@@ -40,9 +38,23 @@ fun MainBottomNavigation() {
     val scope: CoroutineScope = rememberCoroutineScope()
 
     val navigationItems = viewModel.getBottomNavigationItems()
-    val backgroundColor = MAIN_NAVIGATION_BACKGROUND_COLOR
-    val textIconActiveColor = MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
-    val textIconInactiveColor = MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
+    val topBarBackgroundColor = viewModel.getTopBarBackgroundColor().toColor()
+    val topBarTextIconColor = viewModel.getTopBarTextIconColor().toColor()
+    val mainNavigationBackgroundColor = viewModel.getMainNavigationBackgroundColor().toColor()
+
+    val mainNavigationTextIconActiveColor =
+        viewModel.getMainNavigationSelectedTextIconColor().toColor()
+
+    val mainNavigationTextIconInactiveColor =
+        viewModel.getMainNavigationUnselectedTextIconColor().toColor()
+
+    val sideNavigationBackgroundColor = viewModel.getSideNavigationBackgroundColor().toColor()
+
+    val sideNavigationTextIconActiveColor =
+        viewModel.getSideNavigationSelectedTextIconColor().toColor()
+
+    val sideNavigationTextIconInactiveColor =
+        viewModel.getSideNavigationUnselectedTextIconColor().toColor()
 
     NavHostMain(
         drawerState = drawerState,
@@ -53,9 +65,14 @@ fun MainBottomNavigation() {
             scope.launch { drawerState.close() }
         },
         mainNavigationItems = navigationItems,
-        backgroundColor = backgroundColor,
-        textIconActiveColor = textIconActiveColor,
-        textIconInactiveColor = textIconInactiveColor
+        mainNavigationBackgroundColor = mainNavigationBackgroundColor,
+        topBarBackgroundColor = topBarBackgroundColor,
+        topBarTextIconColor = topBarTextIconColor,
+        mainNavigationTextIconActiveColor = mainNavigationTextIconActiveColor,
+        mainNavigationTextIconInactiveColor = mainNavigationTextIconInactiveColor,
+        sideNavigationBackgroundColor = sideNavigationBackgroundColor,
+        sideNavigationTextIconActiveColor = sideNavigationTextIconActiveColor,
+        sideNavigationTextIconInactiveColor = sideNavigationTextIconInactiveColor,
     )
 }
 
@@ -66,12 +83,16 @@ fun NavHostMain(
     navController: NavHostController = rememberNavController(),
     onNavigate: (rootName: String) -> Unit,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
-    backgroundColor: Long,
-    textIconActiveColor: Long,
-    textIconInactiveColor: Long
+    topBarBackgroundColor: Long,
+    topBarTextIconColor: Long,
+    mainNavigationBackgroundColor: Long,
+    mainNavigationTextIconActiveColor: Long,
+    mainNavigationTextIconInactiveColor: Long,
+    sideNavigationBackgroundColor: Long,
+    sideNavigationTextIconActiveColor: Long,
+    sideNavigationTextIconInactiveColor: Long
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = backStackEntry?.destination
     var selectedTabItem: MainNavigationItem by remember { mutableStateOf(mainNavigationItems[0]) }
 
     val selectedTabItemTitle by remember(selectedTabItem) {
@@ -87,8 +108,8 @@ fun NavHostMain(
         topBar = {
             TopBar(
                 title = selectedTabItemTitle,
-                backgroundColor = backgroundColor,
-                textIconActiveColor = textIconActiveColor,
+                backgroundColor = topBarBackgroundColor,
+                textIconActiveColor = topBarTextIconColor,
                 canNavigateBack = !shouldShowBottomAppBar,
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
@@ -112,9 +133,9 @@ fun NavHostMain(
                     }
                 },
                 isItemSelected = { item -> isItemSelected(selectedTabItem, item) },
-                backgroundColor = backgroundColor,
-                textIconActiveColor = textIconActiveColor,
-                textIconInactiveColor = textIconInactiveColor,
+                backgroundColor = mainNavigationBackgroundColor,
+                textIconActiveColor = mainNavigationTextIconActiveColor,
+                textIconInactiveColor = mainNavigationTextIconInactiveColor,
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }
@@ -158,22 +179,28 @@ fun NavHostMain(
                                 item.isWebView() -> item.url?.let { webViewUrl ->
                                     WebViewScreen(
                                         webViewUrl = webViewUrl,
-                                        progressColor = backgroundColor,
+                                        progressColor = mainNavigationBackgroundColor,
                                         onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
                                             ?: arrayListOf(),
-                                        drawerState = drawerState
+                                        drawerState = drawerState,
+                                        backgroundColor = sideNavigationBackgroundColor,
+                                        textIconActiveColor = sideNavigationTextIconActiveColor,
+                                        textIconInactiveColor = sideNavigationTextIconInactiveColor
                                     )
                                 }
 
                                 else -> item.url?.let { webViewUrl ->
                                     HomeScreen(
                                         webViewUrl = webViewUrl,
-                                        progressColor = backgroundColor,
+                                        progressColor = mainNavigationBackgroundColor,
                                         onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
                                             ?: arrayListOf(),
-                                        drawerState = drawerState
+                                        drawerState = drawerState,
+                                        backgroundColor = sideNavigationBackgroundColor,
+                                        textIconActiveColor = sideNavigationTextIconActiveColor,
+                                        textIconInactiveColor = sideNavigationTextIconInactiveColor
                                     )
                                 }
                             }
@@ -183,10 +210,13 @@ fun NavHostMain(
                     navigationItem.url?.let { webViewUrl ->
                         HomeScreen(
                             webViewUrl = webViewUrl,
-                            progressColor = backgroundColor,
+                            progressColor = mainNavigationBackgroundColor,
                             onNavigate = { routeName -> onNavigate(routeName) },
                             subCategories = navigationItem.subCategories ?: arrayListOf(),
-                            drawerState = drawerState
+                            drawerState = drawerState,
+                            backgroundColor = sideNavigationBackgroundColor,
+                            textIconActiveColor = sideNavigationTextIconActiveColor,
+                            textIconInactiveColor = sideNavigationTextIconInactiveColor
                         )
                     }
                 }

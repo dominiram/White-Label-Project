@@ -87,7 +87,7 @@ fun AppBottomNavigationBar(
 
                 Row(
                     modifier = Modifier
-                        .padding(top = 12.dp)
+                        .padding(vertical = 8.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .selectableGroup(),

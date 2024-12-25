@@ -13,14 +13,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SubCategory(title: String, onClick: () -> Unit, isSelected: Boolean) {
+fun SubCategory(
+    title: String,
+    onClick: () -> Unit,
+    isSelected: Boolean,
+    activeColor: Long,
+    inactiveColor: Long
+) {
     Text(
         modifier = Modifier.padding(top = 4.dp, start = 12.dp).clickable { onClick() },
         text = title,
         style = TextStyle(
             fontSize = 20.sp,
             fontWeight = FontWeight(if (isSelected) 700 else 400),
-            color = if (isSelected) Color.DarkGray else Color.LightGray,
+            color = if (isSelected) Color(activeColor) else Color(inactiveColor),
             fontFamily = FontFamily.SansSerif
         )
     )
