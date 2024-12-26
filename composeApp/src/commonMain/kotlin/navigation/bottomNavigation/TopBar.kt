@@ -39,7 +39,7 @@ import composables.SubCategory
 import models.NavigationItem
 import org.jetbrains.compose.resources.painterResource
 import whitelabelproject.composeapp.generated.resources.Res
-import whitelabelproject.composeapp.generated.resources.pancevo_logo
+import whitelabelproject.composeapp.generated.resources.logo
 
 @Composable
 fun NavigationDrawer(
@@ -123,7 +123,7 @@ fun TopBar(
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()
                         .width(80.dp),
-                    painter = painterResource(Res.drawable.pancevo_logo),
+                    painter = painterResource(Res.drawable.logo),
                     contentDescription = null
                 )
 
