@@ -1,5 +1,6 @@
 package navigation.bottomNavigation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,9 +37,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import composables.SubCategory
 import models.NavigationItem
-import org.jetbrains.compose.resources.vectorResource
+import org.jetbrains.compose.resources.painterResource
 import whitelabelproject.composeapp.generated.resources.Res
-import whitelabelproject.composeapp.generated.resources.ic_logo
+import whitelabelproject.composeapp.generated.resources.pancevo_logo
 
 @Composable
 fun NavigationDrawer(
@@ -117,12 +118,12 @@ fun TopBar(
                 contentAlignment = if (hasGotLeftSubNavigation) Alignment.CenterStart else Alignment.CenterEnd
             ) {
 
-                Icon(
+                Image(
                     modifier = Modifier
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()
                         .width(80.dp),
-                    imageVector = vectorResource(Res.drawable.ic_logo),
+                    painter = painterResource(Res.drawable.pancevo_logo),
                     contentDescription = null
                 )
 

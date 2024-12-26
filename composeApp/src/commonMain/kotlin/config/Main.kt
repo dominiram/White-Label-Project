@@ -16,7 +16,7 @@ fun Main() {
     val progressColor = Constants.MAIN_NAVIGATION_BACKGROUND_COLOR
 
     when (homeViewState.toUiState()) {
-        is HomeScreenState.Loading -> LoadingIndicatorScreen(progressColor)
+        is HomeScreenState.Loading -> LoadingIndicatorScreen(progressColor) //TODO: Splash screen
         is HomeScreenState.Error -> MainConfigErrorScreen()
         is HomeScreenState.Success -> MainBottomNavigation()
     }
