@@ -15,4 +15,5 @@ class BottomNavigationViewModel(
     fun getSideNavigationBackgroundColor() = configRepository.getSideNavigationBackgroundColor()
     fun getSideNavigationSelectedTextIconColor() = configRepository.getSideNavigationSelectedTextIconColor()
     fun getSideNavigationUnselectedTextIconColor() = configRepository.getSideNavigationUnselectedTextIconColor()
+    fun getLogoUrl() = configRepository.getLogoUrl()
 }

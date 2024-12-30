@@ -1,6 +1,5 @@
 package navigation.bottomNavigation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,11 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import composables.SubCategory
 import models.NavigationItem
-import org.jetbrains.compose.resources.painterResource
-import whitelabelproject.composeapp.generated.resources.Res
-import whitelabelproject.composeapp.generated.resources.logo
 
 @Composable
 fun NavigationDrawer(
@@ -102,6 +99,7 @@ fun NavigationDrawer(
 @Composable
 fun TopBar(
     title: String,
+    logoUrl: String,
     backgroundColor: Long,
     textIconActiveColor: Long,
     canNavigateBack: Boolean,
@@ -118,12 +116,14 @@ fun TopBar(
                 contentAlignment = if (hasGotLeftSubNavigation) Alignment.CenterStart else Alignment.CenterEnd
             ) {
 
-                Image(
+                AsyncImage(
                     modifier = Modifier
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()
-                        .width(80.dp),
-                    painter = painterResource(Res.drawable.logo),
+                        .width(100.dp)
+                        .background(Color.White)
+                        .padding(horizontal = 8.dp),
+                    model = logoUrl,
                     contentDescription = null
                 )
 

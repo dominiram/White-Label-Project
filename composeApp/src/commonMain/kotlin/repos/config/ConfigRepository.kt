@@ -17,4 +17,5 @@ interface ConfigRepository {
     fun getSideNavigationBackgroundColor(): String
     fun getSideNavigationSelectedTextIconColor(): String
     fun getSideNavigationUnselectedTextIconColor(): String
+    fun getLogoUrl(): String
 }

@@ -56,6 +56,8 @@ fun MainBottomNavigation() {
     val sideNavigationTextIconInactiveColor =
         viewModel.getSideNavigationUnselectedTextIconColor().toColor()
 
+    val logoUrl = viewModel.getLogoUrl()
+
     NavHostMain(
         drawerState = drawerState,
         scope = scope,
@@ -65,6 +67,7 @@ fun MainBottomNavigation() {
             scope.launch { drawerState.close() }
         },
         mainNavigationItems = navigationItems,
+        logoUrl = logoUrl,
         mainNavigationBackgroundColor = mainNavigationBackgroundColor,
         topBarBackgroundColor = topBarBackgroundColor,
         topBarTextIconColor = topBarTextIconColor,
@@ -83,6 +86,7 @@ fun NavHostMain(
     navController: NavHostController = rememberNavController(),
     onNavigate: (rootName: String) -> Unit,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
+    logoUrl: String,
     topBarBackgroundColor: Long,
     topBarTextIconColor: Long,
     mainNavigationBackgroundColor: Long,
@@ -108,6 +112,7 @@ fun NavHostMain(
         topBar = {
             TopBar(
                 title = selectedTabItemTitle,
+                logoUrl = logoUrl,
                 backgroundColor = topBarBackgroundColor,
                 textIconActiveColor = topBarTextIconColor,
                 canNavigateBack = !shouldShowBottomAppBar,

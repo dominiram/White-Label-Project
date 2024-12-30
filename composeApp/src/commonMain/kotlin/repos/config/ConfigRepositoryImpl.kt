@@ -39,6 +39,8 @@ class ConfigRepositoryImpl(private val apiService: ApiService) : ConfigRepositor
     override fun getSideNavigationUnselectedTextIconColor(): String =
         config?.options?.sideBarUnselectedBarTextIconColor ?: DEFAULT_BACKGROUND_COLOR
 
+    override fun getLogoUrl(): String = config?.options?.logo ?: ""
+
     companion object {
         private const val DEFAULT_BACKGROUND_COLOR = "#183354"
         private const val DEFAULT_TEXT_ICON_COLOR = "#FFF"
