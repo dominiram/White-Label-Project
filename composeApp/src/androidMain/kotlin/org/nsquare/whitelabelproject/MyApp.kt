@@ -10,7 +10,7 @@ class MyApp: Application() {
         NotifierManager.initialize(
             configuration = NotificationPlatformConfiguration.Android(
                 notificationIconResId = R.drawable.ic_notification,
-                notificationIconColorResId = R.color.orange,
+                notificationIconColorResId = R.color.ic_notification_background,
                 showPushNotification = true,
             )
         )
