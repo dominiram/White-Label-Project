@@ -189,6 +189,7 @@ buildkonfig {
     }
 
     defaultConfigs("rtvPancevo") {
+        buildConfigField(STRING, "CONFIG_NAME", "rtvPancevo")
         buildConfigField(STRING, "BASE_URL", "https://rtvpancevo.nsquaredapps.com")
     }
 
