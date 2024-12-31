@@ -1,8 +1,7 @@
 package networking
 
-import models.MainConfig
 import kotlinx.coroutines.flow.Flow
-import models.MainConfigWrapper
+import models.MainConfig
 
 interface ApiService {
     suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>>
