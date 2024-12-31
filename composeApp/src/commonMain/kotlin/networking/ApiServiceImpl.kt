@@ -14,7 +14,7 @@ class ApiServiceImpl(private val httpClient: HttpClient) : ApiService {
     private val log = logging("ApiService")
 
     override suspend fun getAppConfig(): Flow<NetworkResult<MainConfig>> {
-        val apiKey = "%Q/JE31Su;H%Z*8.KuHY"
+        val apiKey = BuildKonfig.API_KEY
         val encodedApiKey = apiKey.encodeURLQueryComponent()
 
         return toNetworkResultFlow {
