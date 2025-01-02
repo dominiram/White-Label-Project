@@ -196,7 +196,7 @@ buildkonfig {
         buildConfigField(STRING, "API_KEY", "%Q/JE31Su;H%Z*8.KuHY")
     }
 
-    defaultConfigs("dunavTv") {
+    defaultConfigs("tvDunav") {
         buildConfigField(STRING, "CONFIG_NAME", "tvDunav")
         buildConfigField(STRING, "BASE_URL", "https://dunavtelevizija.nsquaredapps.com")
         buildConfigField(STRING, "API_KEY", "|47_r£8R9<z6y(98)ARs")
