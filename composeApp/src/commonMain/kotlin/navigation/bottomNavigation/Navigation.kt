@@ -9,6 +9,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
 import org.koin.compose.viewmodel.koinViewModel
+import pushNotifications.initPushNotifications
+import screens.article.ArticleScreen
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
 import utils.Constants.ENTER_DURATION
@@ -77,6 +80,19 @@ fun MainBottomNavigation() {
         sideNavigationTextIconActiveColor = sideNavigationTextIconActiveColor,
         sideNavigationTextIconInactiveColor = sideNavigationTextIconInactiveColor,
     )
+
+    initPushNotifications(
+        onPushNotificationClicked = { viewModel.storePushNotification(it) }
+    )
+
+    val pushNotification = viewModel.pushNotification.collectAsState()
+
+    pushNotification.value.takeIf { it.isNullOrBlank() }?.let {
+        ArticleScreen(
+            articleUrl = it,
+            progressColor = mainNavigationBackgroundColor
+        )
+    }
 }
 
 @Composable

@@ -121,7 +121,6 @@ fun TopBar(
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()
                         .width(100.dp)
-                        .background(Color.White)
                         .padding(horizontal = 8.dp),
                     model = logoUrl,
                     contentDescription = null

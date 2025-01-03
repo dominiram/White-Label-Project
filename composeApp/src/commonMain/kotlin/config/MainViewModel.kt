@@ -13,7 +13,6 @@ import repos.config.ConfigRepository
 
 class MainViewModel(private val configRepository: ConfigRepository) : ViewModel() {
     private val _homeState = MutableStateFlow(HomeState())
-
     val homeViewState = _homeState.asStateFlow()
 
     init {

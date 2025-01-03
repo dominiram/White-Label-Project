@@ -3,7 +3,7 @@ package pushNotifications
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
 
-fun initPushNotifications() {
+fun initPushNotifications(onPushNotificationClicked: (PayloadData) -> Unit) {
     NotifierManager.addListener(object : NotifierManager.Listener {
         override fun onNewToken(token: String) {
             println("onNewToken: $token")
@@ -22,6 +22,7 @@ fun initPushNotifications() {
 
         override fun onNotificationClicked(data: PayloadData) {
             super.onNotificationClicked(data)
+            onPushNotificationClicked(data)
             println("onNotificationClicked: $data")
         }
     })

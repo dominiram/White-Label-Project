@@ -5,7 +5,6 @@ import dev.icerock.moko.permissions.Permission
 import di.initKoin
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import pushNotifications.initPushNotifications
 import utils.requestRuntimePermissions
 
 var isKoinInitialized = false
@@ -18,14 +17,11 @@ fun App() {
         initKoin()
         isKoinInitialized = true
     }
-
-    initPushNotifications()
-
     val viewModel = koinViewModel<AppViewModel>()
+    viewModel.initPushNotificationToken()
     viewModel.subscribeToNewsChannel()
 
     MaterialTheme {
-        viewModel.initPushNotificationToken()
         Main()
         requestRuntimePermissions(Permission.REMOTE_NOTIFICATION)
     }
