@@ -51,6 +51,6 @@ val modules = module {
     single<ConfigRepository> { ConfigRepositoryImpl(get()) }
     viewModel { AppViewModel(get()) }
     viewModel { MainViewModel(get()) }
-    viewModel { BottomNavigationViewModel(get()) }
+    viewModel { BottomNavigationViewModel(get(), get()) }
     viewModel { HomeViewModel(get()) }
 }

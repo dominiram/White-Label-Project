@@ -92,6 +92,8 @@ fun MainBottomNavigation() {
             articleUrl = it,
             progressColor = mainNavigationBackgroundColor
         )
+
+        viewModel.clearPushNotification()
     }
 }
 

@@ -48,7 +48,7 @@ class BottomNavigationViewModel(
     fun clearPushNotification() = pushNotificationsRepository.clearPushNotification()
 
     private fun collectLatestPushNotificationData() = viewModelScope.launch {
-        pushNotificationsRepository.getLastPushNotification().collectLatest {
+        pushNotificationsRepository.getLastPushNotificationUrl().collectLatest {
             _pushNotification.value = it
 //            _pushNotification.update { pushNotificationData ->
 //                pushNotificationData?.apply {

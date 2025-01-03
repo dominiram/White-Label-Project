@@ -13,20 +13,30 @@ class PushNotificationsRepositoryImpl(
     private val ioCoroutineContext: CoroutineContext = Dispatchers.IO
 ) : PushNotificationsRepository {
     private val lastPushNotification = MutableStateFlow<PayloadData?>(null)
+    private val lastArticlePushNotification = MutableStateFlow<String?>(null)
 
     override suspend fun initPushNotificationToken() = withContext(ioCoroutineContext) {
         val firebasePushToken = NotifierManager.getPushNotifier().getToken()
         println("FirebasePushToken = $firebasePushToken")
     }
 
-    override fun getLastPushNotification() = lastPushNotification
+    override fun getLastPushNotificationUrl() = lastArticlePushNotification
 
-    override suspend fun storePushNotification(pushNotificationPayload: PayloadData) =
+    override suspend fun storePushNotification(pushNotificationPayload: PayloadData) {
         lastPushNotification.emit(pushNotificationPayload)
+
+        (pushNotificationPayload[PUSH_NOTIFICATION_URL_KEY] as? String)?.let {
+            lastArticlePushNotification.emit(it)
+        }
+    }
 
     override fun clearPushNotification() = lastPushNotification.update {
         it?.toMutableMap()?.apply {
             clear()
         }
+    }
+
+    companion object {
+        private const val PUSH_NOTIFICATION_URL_KEY = "url"
     }
 }

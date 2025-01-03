@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface PushNotificationsRepository {
     suspend fun initPushNotificationToken()
 
-    fun getLastPushNotification(): Flow<String?>
+    fun getLastPushNotificationUrl(): Flow<String?>
 
     suspend fun storePushNotification(pushNotificationPayload: PayloadData)
 
