@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
 import org.koin.compose.viewmodel.koinViewModel
-import pushNotifications.initPushNotifications
 import screens.article.ArticleScreen
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
@@ -61,6 +60,12 @@ fun MainBottomNavigation() {
 
     val logoUrl = viewModel.getLogoUrl()
 
+    val pushNotification by viewModel.pushNotification.collectAsState(null)
+
+    pushNotification.takeIf { !it.isNullOrBlank() }?.let {
+        navController.navigate("article")
+    }
+
     NavHostMain(
         drawerState = drawerState,
         scope = scope,
@@ -79,22 +84,8 @@ fun MainBottomNavigation() {
         sideNavigationBackgroundColor = sideNavigationBackgroundColor,
         sideNavigationTextIconActiveColor = sideNavigationTextIconActiveColor,
         sideNavigationTextIconInactiveColor = sideNavigationTextIconInactiveColor,
+        pushNotification = pushNotification
     )
-
-    initPushNotifications(
-        onPushNotificationClicked = { viewModel.storePushNotification(it) }
-    )
-
-    val pushNotification = viewModel.pushNotification.collectAsState()
-
-    pushNotification.value.takeIf { it.isNullOrBlank() }?.let {
-        ArticleScreen(
-            articleUrl = it,
-            progressColor = mainNavigationBackgroundColor
-        )
-
-        viewModel.clearPushNotification()
-    }
 }
 
 @Composable
@@ -112,7 +103,8 @@ fun NavHostMain(
     mainNavigationTextIconInactiveColor: Long,
     sideNavigationBackgroundColor: Long,
     sideNavigationTextIconActiveColor: Long,
-    sideNavigationTextIconInactiveColor: Long
+    sideNavigationTextIconInactiveColor: Long,
+    pushNotification: String?
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     var selectedTabItem: MainNavigationItem by remember { mutableStateOf(mainNavigationItems[0]) }
@@ -137,7 +129,7 @@ fun NavHostMain(
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
-                navigateUp = { navController.navigateUp() }
+                navigateBack = { navController.navigateUp() }
             )
         },
         bottomBar = {
@@ -242,6 +234,12 @@ fun NavHostMain(
                             textIconInactiveColor = sideNavigationTextIconInactiveColor
                         )
                     }
+                }
+            }
+
+            composable("article") {
+                pushNotification?.let {
+                    ArticleScreen(articleUrl = it, progressColor = mainNavigationBackgroundColor)
                 }
             }
         }

@@ -20,6 +20,7 @@ import repos.config.ConfigRepository
 import repos.config.ConfigRepositoryImpl
 import repos.pushNotifications.PushNotificationsRepository
 import repos.pushNotifications.PushNotificationsRepositoryImpl
+import screens.article.ArticleViewModel
 import screens.home.HomeViewModel
 import whitelabelproject.buildKonfig.BuildKonfig
 
@@ -52,5 +53,6 @@ val modules = module {
     viewModel { AppViewModel(get()) }
     viewModel { MainViewModel(get()) }
     viewModel { BottomNavigationViewModel(get(), get()) }
+    viewModel { ArticleViewModel(get()) }
     viewModel { HomeViewModel(get()) }
 }

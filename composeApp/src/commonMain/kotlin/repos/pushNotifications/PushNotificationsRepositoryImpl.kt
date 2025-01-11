@@ -5,7 +5,6 @@ import com.mmk.kmpnotifier.notification.PayloadData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
@@ -30,11 +29,7 @@ class PushNotificationsRepositoryImpl(
         }
     }
 
-    override fun clearPushNotification() = lastPushNotification.update {
-        it?.toMutableMap()?.apply {
-            clear()
-        }
-    }
+    override suspend fun clearPushNotification() = lastArticlePushNotification.emit(null)
 
     companion object {
         private const val PUSH_NOTIFICATION_URL_KEY = "url"

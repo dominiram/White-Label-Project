@@ -106,7 +106,7 @@ fun TopBar(
     hasGotLeftSubNavigation: Boolean,
     hasGotRightSubNavigation: Boolean,
     onDrawerClicked: () -> Unit,
-    navigateUp: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -152,7 +152,7 @@ fun TopBar(
         modifier = modifier,
         navigationIcon = {
             if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
+                IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         tint = Color(textIconActiveColor),

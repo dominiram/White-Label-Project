@@ -10,5 +10,5 @@ interface PushNotificationsRepository {
 
     suspend fun storePushNotification(pushNotificationPayload: PayloadData)
 
-    fun clearPushNotification()
+    suspend fun clearPushNotification()
 }
