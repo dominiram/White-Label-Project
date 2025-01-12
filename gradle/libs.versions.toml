@@ -29,6 +29,7 @@ coilNetworkKtor = "3.0.0-alpha06"
 firebaseCrashlytics = "3.0.2"
 googleServices = "4.4.2"
 gitliveFirebase = "1.10.4"
+datastore = "1.1.1"
 
 [libraries]
 #AndroidX
@@ -103,6 +104,10 @@ navigator-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "v
 #Image Picker
 peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo" }
 peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
+
+#Data store
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 [bundles]
 ktor = ["ktor-client-core", "ktor-client-content-negotiation"]

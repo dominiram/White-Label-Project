@@ -1,5 +1,7 @@
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import config.Main
 import dev.icerock.moko.permissions.Permission
 import di.initKoin
@@ -12,7 +14,7 @@ var isKoinInitialized = false
 
 @Composable
 @Preview
-fun App() {
+fun App(preferences: DataStore<Preferences>) {
 
     if (!isKoinInitialized) {
         initKoin()
@@ -22,6 +24,7 @@ fun App() {
     val viewModel = koinViewModel<AppViewModel>()
     viewModel.initPushNotificationToken()
     viewModel.subscribeToNewsChannel()
+    viewModel.initDataStore(preferences)
 
     initPushNotifications(
         onPushNotificationClicked = { viewModel.storePushNotification(it) }

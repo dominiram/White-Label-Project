@@ -128,6 +128,10 @@ kotlin {
 
             //logger
             implementation(libs.logging)
+
+            //data store
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
         }
 
         nativeMain.dependencies {

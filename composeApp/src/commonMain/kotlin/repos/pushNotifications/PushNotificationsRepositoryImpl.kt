@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
+import org.lighthousegames.logging.logging
 import kotlin.coroutines.CoroutineContext
 
 class PushNotificationsRepositoryImpl(
@@ -22,6 +23,7 @@ class PushNotificationsRepositoryImpl(
     override fun getLastPushNotificationUrl() = lastArticlePushNotification
 
     override suspend fun storePushNotification(pushNotificationPayload: PayloadData) {
+        logging("PushNotificationsRepositoryImpl").d { "storePushNotification" }
         lastPushNotification.emit(pushNotificationPayload)
 
         (pushNotificationPayload[PUSH_NOTIFICATION_URL_KEY] as? String)?.let {

@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
 import org.koin.compose.viewmodel.koinViewModel
+import org.lighthousegames.logging.logging
 import screens.article.ArticleScreen
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
@@ -63,6 +64,7 @@ fun MainBottomNavigation() {
     val pushNotification by viewModel.pushNotification.collectAsState(null)
 
     pushNotification.takeIf { !it.isNullOrBlank() }?.let {
+        logging("Navigation").d { "pushNotification.takeIf" }
         navController.navigate("article")
     }
 
@@ -238,6 +240,7 @@ fun NavHostMain(
             }
 
             composable("article") {
+                logging("Navigation").d { "composable(article)" }
                 pushNotification?.let {
                     ArticleScreen(articleUrl = it, progressColor = mainNavigationBackgroundColor)
                 }
