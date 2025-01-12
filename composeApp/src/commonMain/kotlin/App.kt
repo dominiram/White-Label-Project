@@ -22,9 +22,9 @@ fun App(preferences: DataStore<Preferences>) {
     }
 
     val viewModel = koinViewModel<AppViewModel>()
+    viewModel.initDataStore(preferences)
     viewModel.initPushNotificationToken()
     viewModel.subscribeToNewsChannel()
-    viewModel.initDataStore(preferences)
 
     initPushNotifications(
         onPushNotificationClicked = { viewModel.storePushNotification(it) }
