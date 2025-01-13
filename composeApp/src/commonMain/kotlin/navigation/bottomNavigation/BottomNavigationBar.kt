@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import models.MainNavigationItem
 import org.jetbrains.compose.resources.DrawableResource
@@ -130,7 +131,8 @@ fun RowScope.AppBottomNavigationBarItem(
             text = label,
             style = TextStyle(
                 fontWeight = if (isSelected) FontWeight(700) else FontWeight(400),
-                color = if (isSelected) Color(textIconActiveColor) else Color(textIconInactiveColor)
+                color = if (isSelected) Color(textIconActiveColor) else Color(textIconInactiveColor),
+                textAlign = TextAlign.Center
             )
         )
     }
