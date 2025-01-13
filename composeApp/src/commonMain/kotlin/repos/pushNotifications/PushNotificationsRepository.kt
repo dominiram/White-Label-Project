@@ -10,7 +10,7 @@ interface PushNotificationsRepository {
 
     suspend fun initPushNotificationToken()
 
-    fun getLastPushNotificationUrl(): Flow<String?>
+    fun getLastPushNotificationUrl(): Flow<String?>?
 
     suspend fun storePushNotification(pushNotificationPayload: PayloadData)
 

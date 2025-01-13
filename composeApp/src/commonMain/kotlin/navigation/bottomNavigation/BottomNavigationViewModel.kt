@@ -44,7 +44,7 @@ class BottomNavigationViewModel(
     fun getLogoUrl() = configRepository.getLogoUrl()
 
     private fun collectLatestPushNotificationData() = viewModelScope.launch {
-        pushNotificationsRepository.getLastPushNotificationUrl().collectLatest {
+        pushNotificationsRepository.getLastPushNotificationUrl()?.collectLatest {
             _pushNotification.value = it
         }
     }

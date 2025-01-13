@@ -30,6 +30,14 @@ class PushNotificationsDataStore(
             }
         }
 
+    suspend fun removePushNotificationArticleUrl() = kotlin.runCatching {
+        withContext(ioCoroutineContext) {
+            dataStore.edit {
+                it.remove(stringPreferencesKey(DATA_STORE_KEY_PUSH_NOTIFICATION))
+            }
+        }
+    }
+
     companion object {
         private const val DATA_STORE_KEY_PUSH_NOTIFICATION = "DATA_STORE_KEY_PUSH_NOTIFICATION"
     }
