@@ -40,5 +40,15 @@ fun SplashScreen() {
                 fontWeight = FontWeight(400)
             )
         )
+
+        Text(
+            modifier = Modifier.padding(top = 8.dp),
+            text = "nsquaredapps.com",
+            style = TextStyle(
+                fontSize = 20.sp,
+                color = Color.Black,
+                fontWeight = FontWeight(400)
+            )
+        )
     }
 }
