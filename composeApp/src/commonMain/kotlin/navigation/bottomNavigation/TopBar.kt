@@ -116,7 +116,7 @@ fun TopBar(
                 contentAlignment = if (hasGotLeftSubNavigation) Alignment.CenterStart else Alignment.CenterEnd
             ) {
 
-                AsyncImage(
+                if (!canNavigateBack) AsyncImage(
                     modifier = Modifier
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()

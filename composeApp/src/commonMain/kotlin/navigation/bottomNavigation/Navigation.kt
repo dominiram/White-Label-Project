@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.multiplatform.webview.web.rememberWebViewNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
@@ -116,8 +117,11 @@ fun NavHostMain(
         )
     }
 
-    val shouldShowBottomAppBar =
-        remember(backStackEntry) { mainNavigationItems.find { it == selectedTabItem } != null }
+    var shouldShowBottomAppBar by remember {
+        mutableStateOf(mainNavigationItems.find { it == selectedTabItem } != null)
+    }
+
+    val navigator = rememberWebViewNavigator()
 
     Scaffold(
         topBar = {
@@ -130,7 +134,7 @@ fun NavHostMain(
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
-                navigateBack = { navController.navigateUp() }
+                navigateBack = { navigator.navigateBack() }
             )
         },
         bottomBar = {
@@ -216,7 +220,9 @@ fun NavHostMain(
                                         drawerState = drawerState,
                                         backgroundColor = sideNavigationBackgroundColor,
                                         textIconActiveColor = sideNavigationTextIconActiveColor,
-                                        textIconInactiveColor = sideNavigationTextIconInactiveColor
+                                        textIconInactiveColor = sideNavigationTextIconInactiveColor,
+                                        navigator = navigator,
+                                        isArticleOpened = { shouldShowBottomAppBar = !it }
                                     )
                                 }
                             }
@@ -232,7 +238,9 @@ fun NavHostMain(
                             drawerState = drawerState,
                             backgroundColor = sideNavigationBackgroundColor,
                             textIconActiveColor = sideNavigationTextIconActiveColor,
-                            textIconInactiveColor = sideNavigationTextIconInactiveColor
+                            textIconInactiveColor = sideNavigationTextIconInactiveColor,
+                            navigator = navigator,
+                            isArticleOpened = { shouldShowBottomAppBar = !it }
                         )
                     }
                 }
