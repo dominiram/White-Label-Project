@@ -39,6 +39,6 @@ class PushNotificationsDataStore(
     }
 
     companion object {
-        private const val DATA_STORE_KEY_PUSH_NOTIFICATION = "DATA_STORE_KEY_PUSH_NOTIFICATION"
+        const val DATA_STORE_KEY_PUSH_NOTIFICATION = "DATA_STORE_KEY_PUSH_NOTIFICATION"
     }
 }

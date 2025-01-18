@@ -15,8 +15,9 @@ class PushNotificationsRepositoryImpl(
 ) : PushNotificationsRepository {
     private var dataStore: PushNotificationsDataStore? = null
 
-    override fun initDataStore(dataStore: DataStore<Preferences>) {
+    override fun initDataStore(dataStore: DataStore<Preferences>, onInitialized: () -> Unit) {
         this.dataStore = PushNotificationsDataStore(dataStore)
+        onInitialized()
     }
 
     override suspend fun initPushNotificationToken() = withContext(ioCoroutineContext) {

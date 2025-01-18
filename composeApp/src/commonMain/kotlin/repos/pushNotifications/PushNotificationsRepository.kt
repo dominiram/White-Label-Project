@@ -6,7 +6,7 @@ import com.mmk.kmpnotifier.notification.PayloadData
 import kotlinx.coroutines.flow.Flow
 
 interface PushNotificationsRepository {
-    fun initDataStore(dataStore: DataStore<Preferences>)
+    fun initDataStore(dataStore: DataStore<Preferences>, onInitialized: () -> Unit)
 
     suspend fun initPushNotificationToken()
 

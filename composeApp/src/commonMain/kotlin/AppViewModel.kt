@@ -23,6 +23,6 @@ class AppViewModel(
         pushNotificationsRepository.storePushNotification(pushNotificationPayload)
     }
 
-    fun initDataStore(dataStore: DataStore<Preferences>) =
-        pushNotificationsRepository.initDataStore(dataStore)
+    fun initDataStore(dataStore: DataStore<Preferences>, onInitialized: () -> Unit) =
+        pushNotificationsRepository.initDataStore(dataStore, onInitialized)
 }

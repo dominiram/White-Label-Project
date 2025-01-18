@@ -2,6 +2,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.mmk.kmpnotifier.notification.PayloadData
 import config.Main
 import dev.icerock.moko.permissions.Permission
 import di.initKoin
@@ -11,6 +12,7 @@ import pushNotifications.initPushNotifications
 import utils.requestRuntimePermissions
 
 var isKoinInitialized = false
+var preInitializedPushNotification: PayloadData? = null
 
 @Composable
 @Preview
@@ -22,12 +24,19 @@ fun App(preferences: DataStore<Preferences>) {
     }
 
     val viewModel = koinViewModel<AppViewModel>()
-    viewModel.initDataStore(preferences)
+
+    viewModel.initDataStore(preferences)  {
+        preInitializedPushNotification?.let { viewModel.storePushNotification(it) }
+    }
+
     viewModel.initPushNotificationToken()
     viewModel.subscribeToNewsChannel()
 
     initPushNotifications(
-        onPushNotificationClicked = { viewModel.storePushNotification(it) }
+        onPushNotificationClicked = {
+            viewModel.storePushNotification(it)
+            preInitializedPushNotification = it
+        }
     )
 
     MaterialTheme {
