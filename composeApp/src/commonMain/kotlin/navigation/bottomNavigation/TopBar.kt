@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import composables.SubCategory
+import composables.TopBarTitleText
 import models.NavigationItem
 
 @Composable
@@ -120,7 +121,7 @@ fun TopBar(
                     modifier = Modifier
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
                         .fillMaxHeight()
-                        .width(100.dp)
+                        .width(90.dp)
                         .padding(horizontal = 8.dp),
                     model = logoUrl,
                     contentDescription = null
@@ -134,7 +135,7 @@ fun TopBar(
                         contentDescription = null
                     )
 
-                Text(modifier = Modifier.align(Alignment.Center), text = title)
+                TopBarTitleText(modifier = Modifier.align(Alignment.Center), text = title)
 
                 if (hasGotRightSubNavigation)
                     Icon(
