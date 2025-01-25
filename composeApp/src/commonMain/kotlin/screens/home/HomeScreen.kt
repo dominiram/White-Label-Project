@@ -8,7 +8,6 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.WebViewNavigator
-import com.multiplatform.webview.web.rememberWebViewNavigator
 import com.multiplatform.webview.web.rememberWebViewState
 import models.NavigationItem
 import navigation.bottomNavigation.NavigationDrawer
@@ -17,6 +16,7 @@ import screens.loading.LoadingIndicatorScreen
 @Composable
 fun HomeScreen(
     webViewUrl: String,
+    isLeftSideDrawer: Boolean,
     progressColor: Long,
     onNavigate: (rootName: String) -> Unit,
     subCategories: List<NavigationItem>,
@@ -36,7 +36,7 @@ fun HomeScreen(
         }
 
         NavigationDrawer(
-            isLeftSide = true,
+            isLeftSide = isLeftSideDrawer,
             screenContent = {
                 WebView(
                     modifier = Modifier.fillMaxSize(),

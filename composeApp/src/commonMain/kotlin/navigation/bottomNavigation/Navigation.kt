@@ -213,6 +213,7 @@ fun NavHostMain(
                                 else -> item.url?.let { webViewUrl ->
                                     HomeScreen(
                                         webViewUrl = webViewUrl,
+                                        isLeftSideDrawer = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                                         progressColor = mainNavigationBackgroundColor,
                                         onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
@@ -232,6 +233,7 @@ fun NavHostMain(
                     navigationItem.url?.let { webViewUrl ->
                         HomeScreen(
                             webViewUrl = webViewUrl,
+                            isLeftSideDrawer = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                             progressColor = mainNavigationBackgroundColor,
                             onNavigate = { routeName -> onNavigate(routeName) },
                             subCategories = navigationItem.subCategories ?: arrayListOf(),
