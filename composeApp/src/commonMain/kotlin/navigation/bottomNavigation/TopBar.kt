@@ -56,34 +56,36 @@ fun NavigationDrawer(
             gesturesEnabled = false,
             drawerState = drawerState,
             drawerContent = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(fraction = 0.8f)
-                        .fillMaxHeight()
-                        .background(color = Color(backgroundColor)),
-                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    navigationItems.forEach { subCategory ->
-                        if (listOf(
-                                subCategory.name,
-                                subCategory.parentRoute,
-                                subCategory.route
-                            ).all { it != null }
-                        ) SubCategory(
-                            title = subCategory.name!!,
-                            isSelected = isSubcategorySelected(subCategory.url),
-                            onClick = { onNavigationItemClicked(subCategory.getFullRoute()) },
-                            activeColor = textIconActiveColor,
-                            inactiveColor = textIconInactiveColor
-                        )
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(fraction = 0.8f)
+                            .fillMaxHeight()
+                            .background(color = Color(backgroundColor)),
+                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        navigationItems.forEach { subCategory ->
+                            if (listOf(
+                                    subCategory.name,
+                                    subCategory.parentRoute,
+                                    subCategory.route
+                                ).all { it != null }
+                            ) SubCategory(
+                                title = subCategory.name!!,
+                                isSelected = isSubcategorySelected(subCategory.url),
+                                onClick = { onNavigationItemClicked(subCategory.getFullRoute()) },
+                                activeColor = textIconActiveColor,
+                                inactiveColor = textIconInactiveColor
+                            )
 
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(color = Color.LightGray)
-                        )
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(color = Color.LightGray)
+                            )
+                        }
                     }
                 }
             }
