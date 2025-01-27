@@ -16,7 +16,6 @@ import screens.loading.LoadingIndicatorScreen
 @Composable
 fun HomeScreen(
     webViewUrl: String,
-    isLeftSideDrawer: Boolean,
     progressColor: Long,
     onNavigate: (rootName: String) -> Unit,
     subCategories: List<NavigationItem>,
@@ -36,7 +35,6 @@ fun HomeScreen(
         }
 
         NavigationDrawer(
-            isLeftSide = isLeftSideDrawer,
             screenContent = {
                 WebView(
                     modifier = Modifier.fillMaxSize(),

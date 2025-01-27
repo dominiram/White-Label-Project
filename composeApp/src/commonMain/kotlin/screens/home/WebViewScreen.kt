@@ -29,7 +29,6 @@ fun WebViewScreen(
 
     if (isLoading) LoadingIndicatorScreen(progressColor)
     else NavigationDrawer(
-        isLeftSide = true,
         screenContent = {
             WebView(
                 modifier = Modifier.fillMaxSize(),
