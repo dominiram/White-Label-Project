@@ -134,7 +134,10 @@ fun NavHostMain(
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
-                navigateBack = { navigator.navigateBack() }
+                navigateBack = {
+                    if (navigator.canGoBack) navigator.navigateBack()
+                    else navController.popBackStack()
+                }
             )
         },
         bottomBar = {
@@ -248,6 +251,7 @@ fun NavHostMain(
 
             composable(route = NAVIGATION_ROUTE_ARTICLE) {
                 pushNotification?.let {
+                    shouldShowBottomAppBar = false
                     ArticleScreen(articleUrl = it, progressColor = mainNavigationBackgroundColor)
                 }
             }

@@ -109,7 +109,6 @@ fun TopBar(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = if (hasGotLeftSubNavigation) Alignment.CenterStart else Alignment.CenterEnd
             ) {
-
                 if (!canNavigateBack) AsyncImage(
                     modifier = Modifier
                         .align(if (hasGotLeftSubNavigation) Alignment.CenterEnd else Alignment.CenterStart)
@@ -128,7 +127,8 @@ fun TopBar(
                         contentDescription = null
                     )
 
-                TopBarTitleText(modifier = Modifier.align(Alignment.Center), text = title)
+                if (!canNavigateBack)
+                    TopBarTitleText(modifier = Modifier.align(Alignment.Center), text = title)
 
                 if (hasGotRightSubNavigation)
                     Icon(
