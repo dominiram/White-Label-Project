@@ -4,7 +4,7 @@ import android.app.Application
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 
-class MyApp: Application() {
+class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         NotifierManager.initialize(

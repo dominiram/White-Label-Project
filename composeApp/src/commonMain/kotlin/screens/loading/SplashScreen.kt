@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Text
@@ -36,15 +36,15 @@ fun SplashScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
             .padding(vertical = 24.dp, horizontal = 24.dp)
-            .windowInsetsPadding(insets = WindowInsets.systemBars),
+            .background(color = Color.White)
+            .windowInsetsPadding(insets = WindowInsets.navigationBars),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Image(
-            modifier = Modifier.fillMaxWidth().weight(5f),
+            modifier = Modifier.fillMaxWidth().weight(4f),
             painter = painterResource(getLogoForFlavour()),
             contentDescription = null
         )

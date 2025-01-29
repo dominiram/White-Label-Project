@@ -127,8 +127,21 @@ fun TopBar(
                         contentDescription = null
                     )
 
-                if (!canNavigateBack)
-                    TopBarTitleText(modifier = Modifier.align(Alignment.Center), text = title)
+                if (!canNavigateBack) TopBarTitleText(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = title
+                ) else AsyncImage(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .fillMaxHeight()
+                        .width(180.dp)
+                        .padding(
+                            start = 8.dp,
+                            end = Icons.AutoMirrored.Filled.ArrowBack.defaultWidth + 16.dp
+                        ),
+                    model = logoUrl,
+                    contentDescription = null
+                )
 
                 if (hasGotRightSubNavigation)
                     Icon(
