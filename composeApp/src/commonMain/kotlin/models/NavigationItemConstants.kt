@@ -6,4 +6,5 @@ object NavigationItemConstants {
     const val ICON_PATH_RADIO = "ic_radio"
     const val ICON_PATH_TV = "ic_tv"
     const val ICON_PATH_SEARCH = "ic_search"
+    const val NAVIGATION_ROUTE_ARTICLE = "article"
 }

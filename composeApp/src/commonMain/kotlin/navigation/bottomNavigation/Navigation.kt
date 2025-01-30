@@ -9,6 +9,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,16 +21,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.multiplatform.webview.web.rememberWebViewNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import models.MainNavigationItem
+import models.NavigationItemConstants.NAVIGATION_ROUTE_ARTICLE
 import org.koin.compose.viewmodel.koinViewModel
+import screens.article.ArticleScreen
 import screens.home.HomeScreen
 import screens.home.WebViewScreen
 import utils.Constants.ENTER_DURATION
-import utils.Constants.MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
-import utils.Constants.MAIN_NAVIGATION_BACKGROUND_COLOR
-import utils.Constants.MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
+import utils.toColor
 
 @Composable
 fun MainBottomNavigation() {
@@ -40,9 +42,31 @@ fun MainBottomNavigation() {
     val scope: CoroutineScope = rememberCoroutineScope()
 
     val navigationItems = viewModel.getBottomNavigationItems()
-    val backgroundColor = MAIN_NAVIGATION_BACKGROUND_COLOR
-    val textIconActiveColor = MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR
-    val textIconInactiveColor = MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR
+    val topBarBackgroundColor = viewModel.getTopBarBackgroundColor().toColor()
+    val topBarTextIconColor = viewModel.getTopBarTextIconColor().toColor()
+    val mainNavigationBackgroundColor = viewModel.getMainNavigationBackgroundColor().toColor()
+
+    val mainNavigationTextIconActiveColor =
+        viewModel.getMainNavigationSelectedTextIconColor().toColor()
+
+    val mainNavigationTextIconInactiveColor =
+        viewModel.getMainNavigationUnselectedTextIconColor().toColor()
+
+    val sideNavigationBackgroundColor = viewModel.getSideNavigationBackgroundColor().toColor()
+
+    val sideNavigationTextIconActiveColor =
+        viewModel.getSideNavigationSelectedTextIconColor().toColor()
+
+    val sideNavigationTextIconInactiveColor =
+        viewModel.getSideNavigationUnselectedTextIconColor().toColor()
+
+    val logoUrl = viewModel.getLogoUrl()
+
+    val pushNotification by viewModel.pushNotification.collectAsState(null)
+
+    pushNotification.takeIf { !it.isNullOrBlank() }?.let {
+        navController.navigate(route = NAVIGATION_ROUTE_ARTICLE)
+    }
 
     NavHostMain(
         drawerState = drawerState,
@@ -53,9 +77,16 @@ fun MainBottomNavigation() {
             scope.launch { drawerState.close() }
         },
         mainNavigationItems = navigationItems,
-        backgroundColor = backgroundColor,
-        textIconActiveColor = textIconActiveColor,
-        textIconInactiveColor = textIconInactiveColor
+        logoUrl = logoUrl,
+        mainNavigationBackgroundColor = mainNavigationBackgroundColor,
+        topBarBackgroundColor = topBarBackgroundColor,
+        topBarTextIconColor = topBarTextIconColor,
+        mainNavigationTextIconActiveColor = mainNavigationTextIconActiveColor,
+        mainNavigationTextIconInactiveColor = mainNavigationTextIconInactiveColor,
+        sideNavigationBackgroundColor = sideNavigationBackgroundColor,
+        sideNavigationTextIconActiveColor = sideNavigationTextIconActiveColor,
+        sideNavigationTextIconInactiveColor = sideNavigationTextIconInactiveColor,
+        pushNotification = pushNotification
     )
 }
 
@@ -66,12 +97,18 @@ fun NavHostMain(
     navController: NavHostController = rememberNavController(),
     onNavigate: (rootName: String) -> Unit,
     mainNavigationItems: List<MainNavigationItem> = arrayListOf(),
-    backgroundColor: Long,
-    textIconActiveColor: Long,
-    textIconInactiveColor: Long
+    logoUrl: String,
+    topBarBackgroundColor: Long,
+    topBarTextIconColor: Long,
+    mainNavigationBackgroundColor: Long,
+    mainNavigationTextIconActiveColor: Long,
+    mainNavigationTextIconInactiveColor: Long,
+    sideNavigationBackgroundColor: Long,
+    sideNavigationTextIconActiveColor: Long,
+    sideNavigationTextIconInactiveColor: Long,
+    pushNotification: String?
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = backStackEntry?.destination
     var selectedTabItem: MainNavigationItem by remember { mutableStateOf(mainNavigationItems[0]) }
 
     val selectedTabItemTitle by remember(selectedTabItem) {
@@ -80,20 +117,27 @@ fun NavHostMain(
         )
     }
 
-    val shouldShowBottomAppBar =
-        remember(backStackEntry) { mainNavigationItems.find { it == selectedTabItem } != null }
+    var shouldShowBottomAppBar by remember {
+        mutableStateOf(mainNavigationItems.find { it == selectedTabItem } != null)
+    }
+
+    val navigator = rememberWebViewNavigator()
 
     Scaffold(
         topBar = {
             TopBar(
                 title = selectedTabItemTitle,
-                backgroundColor = backgroundColor,
-                textIconActiveColor = textIconActiveColor,
+                logoUrl = logoUrl,
+                backgroundColor = topBarBackgroundColor,
+                textIconActiveColor = topBarTextIconColor,
                 canNavigateBack = !shouldShowBottomAppBar,
                 hasGotLeftSubNavigation = !selectedTabItem.leftSubCategories.isNullOrEmpty(),
                 hasGotRightSubNavigation = !selectedTabItem.rightSubCategories.isNullOrEmpty(),
                 onDrawerClicked = { scope.launch { if (drawerState.isOpen) drawerState.close() else drawerState.open() } },
-                navigateUp = { navController.navigateUp() }
+                navigateBack = {
+                    if (navigator.canGoBack) navigator.navigateBack()
+                    else navController.popBackStack()
+                }
             )
         },
         bottomBar = {
@@ -112,9 +156,9 @@ fun NavHostMain(
                     }
                 },
                 isItemSelected = { item -> isItemSelected(selectedTabItem, item) },
-                backgroundColor = backgroundColor,
-                textIconActiveColor = textIconActiveColor,
-                textIconInactiveColor = textIconInactiveColor,
+                backgroundColor = mainNavigationBackgroundColor,
+                textIconActiveColor = mainNavigationTextIconActiveColor,
+                textIconInactiveColor = mainNavigationTextIconInactiveColor,
                 closeNavigationDrawer = { scope.launch { drawerState.close() } }
             )
         }
@@ -158,28 +202,30 @@ fun NavHostMain(
                                 item.isWebView() -> item.url?.let { webViewUrl ->
                                     WebViewScreen(
                                         webViewUrl = webViewUrl,
-                                        progressColor = backgroundColor,
-                                        onNavigate = { routeName ->
-                                            onNavigate(routeName)
-                                            scope.launch { drawerState.close() }
-                                        },
+                                        progressColor = mainNavigationBackgroundColor,
+                                        onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
                                             ?: arrayListOf(),
-                                        drawerState = drawerState
+                                        drawerState = drawerState,
+                                        backgroundColor = sideNavigationBackgroundColor,
+                                        textIconActiveColor = sideNavigationTextIconActiveColor,
+                                        textIconInactiveColor = sideNavigationTextIconInactiveColor
                                     )
                                 }
 
                                 else -> item.url?.let { webViewUrl ->
                                     HomeScreen(
                                         webViewUrl = webViewUrl,
-                                        progressColor = backgroundColor,
-                                        onNavigate = { routeName ->
-                                            onNavigate(routeName)
-                                            scope.launch { drawerState.close() }
-                                        },
+                                        progressColor = mainNavigationBackgroundColor,
+                                        onNavigate = { routeName -> onNavigate(routeName) },
                                         subCategories = navigationItem.subCategories
                                             ?: arrayListOf(),
-                                        drawerState = drawerState
+                                        drawerState = drawerState,
+                                        backgroundColor = sideNavigationBackgroundColor,
+                                        textIconActiveColor = sideNavigationTextIconActiveColor,
+                                        textIconInactiveColor = sideNavigationTextIconInactiveColor,
+                                        navigator = navigator,
+                                        isArticleOpened = { shouldShowBottomAppBar = !it }
                                     )
                                 }
                             }
@@ -189,15 +235,24 @@ fun NavHostMain(
                     navigationItem.url?.let { webViewUrl ->
                         HomeScreen(
                             webViewUrl = webViewUrl,
-                            progressColor = backgroundColor,
-                            onNavigate = { routeName ->
-                                onNavigate(routeName)
-                                scope.launch { drawerState.close() }
-                            },
+                            progressColor = mainNavigationBackgroundColor,
+                            onNavigate = { routeName -> onNavigate(routeName) },
                             subCategories = navigationItem.subCategories ?: arrayListOf(),
-                            drawerState = drawerState
+                            drawerState = drawerState,
+                            backgroundColor = sideNavigationBackgroundColor,
+                            textIconActiveColor = sideNavigationTextIconActiveColor,
+                            textIconInactiveColor = sideNavigationTextIconInactiveColor,
+                            navigator = navigator,
+                            isArticleOpened = { shouldShowBottomAppBar = !it }
                         )
                     }
+                }
+            }
+
+            composable(route = NAVIGATION_ROUTE_ARTICLE) {
+                pushNotification?.let {
+                    shouldShowBottomAppBar = false
+                    ArticleScreen(articleUrl = it, progressColor = mainNavigationBackgroundColor)
                 }
             }
         }

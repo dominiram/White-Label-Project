@@ -1,10 +1,12 @@
 package utils
 
 object Constants {
-    const val MAIN_NAVIGATION_BACKGROUND_COLOR = 0xFF183354
-    const val MAIN_NAVIGATION_ACTIVE_TEXT_ICON_COLOR = 0xFFDFDFDF
-    const val MAIN_NAVIGATION_INACTIVE_TEXT_ICON_COLOR = 0xFF545E69
     const val ENTER_DURATION = 300
     const val BACK_CLICK_ROUTE = "BACK"
     const val WEB_VIEW_ROUTE = "WEB_VIEW"
+}
+
+object ConfigNameConstants {
+    const val CONFIG_NAME_RTV_PANCEVO = "rtvPancevo"
+    const val CONFIG_NAME_TV_DUNAV = "tvDunav"
 }

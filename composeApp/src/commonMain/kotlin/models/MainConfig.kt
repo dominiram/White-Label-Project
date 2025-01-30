@@ -14,9 +14,10 @@ data class MainConfigWrapper(
 
 @Serializable
 data class MainConfig(
-    @SerialName("languages") val languageList: List<LanguageResponse>,
+    @SerialName("languages") val languageList: List<LanguageResponse>? = arrayListOf(),
+    @SerialName("options") val options: MainConfigOptions? = null,
 
-)
+    )
 
 @Serializable
 data class LanguageResponse(
@@ -29,6 +30,20 @@ data class LanguageResponse(
 ) {
     val isDefault = default == 1
 }
+
+@Serializable
+data class MainConfigOptions(
+    @SerialName("multi_language") val multiLanguage: Boolean? = null,
+    @SerialName("logo") val logo: String? = null,
+    @SerialName("top_bar_background") val topBarBackgroundColor: String? = null,
+    @SerialName("top_bar_text_icon_color") val topBarTextIconColor: String? = null,
+    @SerialName("main_navigation_background") val mainNavigationBackgroundColor: String? = null,
+    @SerialName("icons_text_color") val mainNavigationUnselectedTextIconColor: String? = null,
+    @SerialName("selected_icons_text_color") val mainNavigationSelectedTextIconColor: String? = null,
+    @SerialName("sidebar_background") val sideBarBackgroundColor: String? = null,
+    @SerialName("icons_text_color_sidebar") val sideBarUnselectedBarTextIconColor: String? = null,
+    @SerialName("selected_icons_text_color_sidebar") val sideBarSelectedBarTextIconColor: String? = null,
+)
 
 sealed class AppMainNavigationConfig(val config: String) {
     data object BottomNavigationConfig : AppMainNavigationConfig("bottom")

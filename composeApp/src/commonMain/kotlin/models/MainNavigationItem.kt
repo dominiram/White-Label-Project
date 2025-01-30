@@ -10,7 +10,6 @@ import models.NavigationItemConstants.ICON_PATH_SEARCH
 import models.NavigationItemConstants.ICON_PATH_TV
 import utils.Constants.WEB_VIEW_ROUTE
 import whitelabelproject.composeapp.generated.resources.Res
-import whitelabelproject.composeapp.generated.resources.compose_multiplatform
 import whitelabelproject.composeapp.generated.resources.ic_home
 import whitelabelproject.composeapp.generated.resources.ic_news
 import whitelabelproject.composeapp.generated.resources.ic_radio
@@ -37,7 +36,7 @@ data class MainNavigationItem(
         ICON_PATH_RADIO -> Res.drawable.ic_radio
         ICON_PATH_TV -> Res.drawable.ic_tv
         ICON_PATH_SEARCH -> Res.drawable.ic_search
-        else -> Res.drawable.compose_multiplatform
+        else -> Res.drawable.ic_news
     }
 
     fun getFirstSubcategoryRoute(): String =

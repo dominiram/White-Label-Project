@@ -123,8 +123,15 @@ kotlin {
             //push notifications
             api(libs.kmpNotifier)
 
+            //permissions
+            implementation(libs.permissions)
+
             //logger
             implementation(libs.logging)
+
+            //data store
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
         }
 
         nativeMain.dependencies {
@@ -177,7 +184,9 @@ buildkonfig {
 
     // default config is required
     defaultConfigs {
-        buildConfigField(STRING, "BASE_URL", "value")
+        buildConfigField(STRING, "CONFIG_NAME", "CONFIG_NAME")
+        buildConfigField(STRING, "BASE_URL", "BASE_URL")
+        buildConfigField(STRING, "API_KEY", "API_KEY")
     }
 
     // flavor is passed as a first argument of defaultConfigs
@@ -186,7 +195,15 @@ buildkonfig {
     }
 
     defaultConfigs("rtvPancevo") {
+        buildConfigField(STRING, "CONFIG_NAME", "rtvPancevo")
         buildConfigField(STRING, "BASE_URL", "https://rtvpancevo.nsquaredapps.com")
+        buildConfigField(STRING, "API_KEY", "%Q/JE31Su;H%Z*8.KuHY")
+    }
+
+    defaultConfigs("tvDunav") {
+        buildConfigField(STRING, "CONFIG_NAME", "tvDunav")
+        buildConfigField(STRING, "BASE_URL", "https://dunavtelevizija.nsquaredapps.com")
+        buildConfigField(STRING, "API_KEY", "|47_r£8R9<z6y(98)ARs")
     }
 
     // flavor is passed as a first argument of targetConfigs - is this needed??
